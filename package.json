@@ -11,14 +11,22 @@
     "package": "electron-vite build && electron-builder"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.107.0",
+    "electron": "^31.0.0",
+    "electron-store": "^11.0.2",
+    "google-auth-library": "^10.9.0",
+    "googleapis": "^173.0.0",
+    "lucide-react": "^1.22.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "electron": "^31.0.0"
+    "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.2",
     "@vitejs/plugin-react": "^4.6.0",
+    "electron-builder": "^24.13.3",
     "electron-vite": "^2.3.0",
-    "electron-builder": "^24.13.3"
+    "tailwindcss": "^4.3.2"
   },
   "build": {
     "appId": "com.user.tide-app",
@@ -26,7 +34,9 @@
     "directories": {
       "output": "release"
     },
-    "files": ["out/**"],
+    "files": [
+      "out/**"
+    ],
     "win": {
       "icon": "src-tauri/icons/icon.ico"
     },

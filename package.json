@@ -1,0 +1,40 @@
+{
+  "name": "tide-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "out/main/main.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "package": "electron-vite build && electron-builder"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "electron": "^31.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.6.0",
+    "electron-vite": "^2.3.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.user.tide-app",
+    "productName": "Tide",
+    "directories": {
+      "output": "release"
+    },
+    "files": ["out/**"],
+    "win": {
+      "icon": "src-tauri/icons/icon.ico"
+    },
+    "mac": {
+      "icon": "src-tauri/icons/icon.icns"
+    },
+    "linux": {
+      "icon": "src-tauri/icons/128x128.png"
+    }
+  }
+}

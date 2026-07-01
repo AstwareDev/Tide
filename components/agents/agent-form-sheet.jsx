@@ -37,7 +37,7 @@ export function AgentFormSheet({ open, onOpenChange, initial, onSave }) {
 
         {!initial && (
           <>
-            <p className="text-xs text-gray-500 mb-2">Start from a template</p>
+            <p className="text-xs text-muted-foreground mb-2">Start from a template</p>
             <AgentTemplatePicker onPick={(tpl) => setForm((f) => ({ ...f, ...tpl }))} />
             <Separator className="my-4" />
           </>
@@ -69,7 +69,7 @@ export function AgentFormSheet({ open, onOpenChange, initial, onSave }) {
                   onClick={() => set("action", a.value)}
                   className={cn(
                     "flex-1 rounded-lg border py-2 text-sm font-medium transition-colors",
-                    form.action === a.value ? `bg-white/10 ${a.color}` : "border-white/10 text-gray-500 hover:text-gray-300"
+                    form.action === a.value ? `bg-accent ${a.color}` : "border-border text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {a.label}

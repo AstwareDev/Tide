@@ -1,0 +1,12 @@
+{
+  "name": "Tide",
+  "short_name": "Tide",
+  "description": "AI-powered Gmail inbox that's faster and calmer than Gmail itself.",
+  "icons": [
+    { "src": "/logo-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/logo-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#1669c1",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

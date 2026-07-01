@@ -13,7 +13,7 @@ import { api } from "@/lib/api-client";
 export default function SettingsPage() {
   const router = useRouter();
   const [email, setEmail] = useState(null);
-  const [settings, setSettings] = useState({ pollingIntervalMs: 300000, anthropicKeyConfigured: false });
+  const [settings, setSettings] = useState({ pollingIntervalMs: 300000, openrouterKeyConfigured: false });
 
   useEffect(() => {
     api.auth.status().then((s) => setEmail(s.email)).catch(() => {});
@@ -42,25 +42,25 @@ export default function SettingsPage() {
           </TabsList>
 
           <TabsContent value="ai">
-            <div className="bg-white/[0.03] border border-white/[0.07] rounded-xl px-4">
+            <div className="bg-card border border-border rounded-xl px-4">
               <SettingRow icon={Cpu} label="AI Provider" description="The SDK used to run email classification agents">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg">
-                  <div className="w-2 h-2 rounded-full bg-violet-400" />
-                  <span className="text-xs text-gray-300">Vercel AI SDK</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-lg">
+                  <div className="w-2 h-2 rounded-full bg-primary" />
+                  <span className="text-xs text-muted-foreground">OpenRouter</span>
                 </div>
               </SettingRow>
 
-              <SettingRow icon={Key} label="API Key" description="Set ANTHROPIC_API_KEY in your Vercel project's environment variables">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg">
-                  {settings.anthropicKeyConfigured ? (
+              <SettingRow icon={Key} label="API Key" description="Set OPENROUTER_API_KEY in your Vercel project's environment variables">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-lg">
+                  {settings.openrouterKeyConfigured ? (
                     <>
-                      <Check size={13} className="text-emerald-400" />
-                      <span className="text-xs text-gray-300">Configured</span>
+                      <Check size={13} className="text-emerald-500" />
+                      <span className="text-xs text-muted-foreground">Configured</span>
                     </>
                   ) : (
                     <>
-                      <X size={13} className="text-red-400" />
-                      <span className="text-xs text-gray-300">Not set</span>
+                      <X size={13} className="text-destructive" />
+                      <span className="text-xs text-muted-foreground">Not set</span>
                     </>
                   )}
                 </div>
@@ -69,7 +69,7 @@ export default function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="agents">
-            <div className="bg-white/[0.03] border border-white/[0.07] rounded-xl px-4">
+            <div className="bg-card border border-border rounded-xl px-4">
               <SettingRow
                 icon={Clock}
                 label="Polling interval"
@@ -92,7 +92,7 @@ export default function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="account">
-            <div className="bg-white/[0.03] border border-white/[0.07] rounded-xl px-4">
+            <div className="bg-card border border-border rounded-xl px-4">
               <SettingRow icon={LogOut} label="Gmail account" description={email || "Connected"}>
                 <Button variant="destructive" size="sm" onClick={handleDisconnect}>
                   <LogOut size={12} />
@@ -103,9 +103,9 @@ export default function SettingsPage() {
           </TabsContent>
         </Tabs>
 
-        <div className="mt-8 p-4 bg-white/[0.02] border border-white/[0.05] rounded-xl">
-          <p className="text-xs text-gray-600 leading-relaxed">
-            <span className="text-gray-400 font-medium">Privacy:</span> Email content is sent to your AI provider for
+        <div className="mt-8 p-4 bg-secondary border border-border rounded-xl">
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            <span className="text-foreground font-medium">Privacy:</span> Email content is sent to your AI provider for
             classification only. OAuth tokens are stored in Vercel KV, scoped to this deployment. Tide has no
             third-party analytics.
           </p>

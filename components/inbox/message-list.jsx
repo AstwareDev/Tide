@@ -120,16 +120,16 @@ export function MessageList() {
   );
 
   return (
-    <div className="flex flex-col h-full border-r border-white/5">
-      <div className="p-3 border-b border-white/5">
-        <div className="flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2">
-          <Search size={14} className="text-gray-500 shrink-0" />
+    <div className="flex flex-col h-full border-r border-border">
+      <div className="p-3 border-b border-border">
+        <div className="flex items-center gap-2 bg-accent rounded-lg px-3 py-2">
+          <Search size={14} className="text-muted-foreground shrink-0" />
           <input
             id="inbox-search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search emails…"
-            className="bg-transparent text-sm text-gray-200 placeholder-gray-500 outline-none flex-1"
+            className="bg-transparent text-sm text-foreground placeholder-muted-foreground outline-none flex-1"
           />
         </div>
       </div>

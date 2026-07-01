@@ -4,7 +4,7 @@
 
 ## What is Tide?
 
-Tide is a personal, single-user Next.js web app deployed on Vercel. It connects to your Gmail account and gives you a fast, keyboard-driven, thread-grouped inbox (3-pane layout, always-on reading pane, `j`/`k`/`e`/`#`/`l` triage shortcuts, a `⌘K` command palette) — and runs background AI agents that classify unlabeled emails using Claude and act on your behalf.
+Tide is a personal, single-user Next.js web app deployed on Vercel. It connects to your Gmail account and gives you a fast, keyboard-driven, thread-grouped inbox (3-pane layout, always-on reading pane, `j`/`k`/`e`/`#`/`l` triage shortcuts, a `⌘K` command palette) — and runs background AI agents that classify unlabeled emails using an LLM (via OpenRouter) and act on your behalf.
 
 You define the rules. The agents do the work. The inbox itself is designed to be the reason you keep coming back.
 
@@ -20,7 +20,7 @@ You define the rules. The agents do the work. The inbox itself is designed to be
 - **Node.js** ≥ 20
 - **A Vercel account** with a KV (Redis) store attached to the project
 - **A Google Cloud project** with the Gmail API enabled and a **Web application** OAuth2 client
-- **An Anthropic API key** — get one at [console.anthropic.com](https://console.anthropic.com)
+- **An OpenRouter API key** — get one at [openrouter.ai/keys](https://openrouter.ai/keys)
 
 ---
 
@@ -45,7 +45,8 @@ Copy `.env.example` to `.env.local` and fill in:
 ```
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
-ANTHROPIC_API_KEY=
+OPENROUTER_API_KEY=
+OPENROUTER_MODEL=anthropic/claude-sonnet-4.5   # any OpenRouter model slug
 SESSION_SECRET=            # any long random string
 CRON_SECRET=               # any long random string
 KV_REST_API_URL=           # from your Vercel KV / Upstash Redis integration
@@ -147,8 +148,8 @@ tracked in KV to avoid re-classifying. The same cycle can be triggered manually 
 
 ## Privacy
 
-- Email content is sent to **Claude's API** (Anthropic) for classification only.
-- OAuth tokens and the Anthropic API key never reach the browser — tokens live in Vercel KV, the API key is a
+- Email content is sent to **OpenRouter** (and whichever model you configure) for classification only.
+- OAuth tokens and the OpenRouter API key never reach the browser — tokens live in Vercel KV, the API key is a
   server-only environment variable.
 - No third-party analytics.
 

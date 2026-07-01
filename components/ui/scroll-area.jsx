@@ -11,7 +11,7 @@ const ScrollArea = React.forwardRef(({ className, children, ...props }, ref) => 
       orientation="vertical"
       className="flex touch-none select-none p-0.5 w-2.5 transition-colors"
     >
-      <ScrollAreaPrimitive.Thumb className="relative flex-1 rounded-full bg-gray-600/60 hover:bg-gray-500/60" />
+      <ScrollAreaPrimitive.Thumb className="relative flex-1 rounded-full bg-muted-foreground/30 hover:bg-muted-foreground/50" />
     </ScrollAreaPrimitive.Scrollbar>
     <ScrollAreaPrimitive.Corner />
   </ScrollAreaPrimitive.Root>

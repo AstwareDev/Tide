@@ -6,7 +6,7 @@ const ACTION_COLORS = {
   label: "text-blue-400",
   archive: "text-amber-400",
   delete: "text-red-400",
-  skip: "text-gray-400",
+  skip: "text-muted-foreground",
 };
 
 const ACTION_ICONS = { label: Tag, archive: Archive, delete: Trash, skip: Bot };
@@ -15,17 +15,17 @@ export function AgentCard({ agent, onToggle, onEdit, onDelete }) {
   const ActionIcon = ACTION_ICONS[agent.action] || Bot;
 
   return (
-    <div className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-4 flex items-start gap-4">
-      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
+    <div className="bg-card border border-border rounded-xl p-4 flex items-start gap-4">
+      <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center shrink-0">
         <ActionIcon size={18} className={ACTION_COLORS[agent.action]} strokeWidth={1.5} />
       </div>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-white text-sm font-medium">{agent.name}</span>
-          {agent.isDefault && <span className="text-[10px] text-gray-600 bg-white/5 px-1.5 py-0.5 rounded">default</span>}
+          <span className="text-foreground text-sm font-medium">{agent.name}</span>
+          {agent.isDefault && <span className="text-[10px] text-muted-foreground bg-secondary px-1.5 py-0.5 rounded">default</span>}
         </div>
-        <p className="text-gray-500 text-xs leading-relaxed mb-2 line-clamp-2">{agent.prompt}</p>
+        <p className="text-muted-foreground text-xs leading-relaxed mb-2 line-clamp-2">{agent.prompt}</p>
         <span className={`text-xs font-medium ${ACTION_COLORS[agent.action]}`}>
           {agent.action === "label" ? `Label → ${agent.labelName}` : agent.action.charAt(0).toUpperCase() + agent.action.slice(1)}
         </span>

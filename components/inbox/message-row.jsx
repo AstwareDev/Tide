@@ -34,8 +34,8 @@ export function MessageRow({ thread, active, checked, onSelect, onToggleCheck, o
       onClick={onSelect}
       data-active={active || undefined}
       className={cn(
-        "w-full text-left px-4 py-3.5 border-b border-white/[0.04] hover:bg-white/[0.03] transition-colors group relative",
-        active && "bg-white/[0.06] border-l-2 border-l-blue-500"
+        "w-full text-left px-4 py-3.5 border-b border-border hover:bg-accent transition-colors group relative",
+        active && "bg-secondary border-l-2 border-l-primary"
       )}
     >
       <div className="flex items-start gap-3">
@@ -55,10 +55,10 @@ export function MessageRow({ thread, active, checked, onSelect, onToggleCheck, o
 
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-0.5">
-            <span className={cn("text-[13px] truncate", thread.unread ? "font-semibold text-white" : "text-gray-300")}>
+            <span className={cn("text-[13px] truncate", thread.unread ? "font-semibold text-foreground" : "text-muted-foreground")}>
               {thread.from?.split("<")[0].trim() || thread.from}
             </span>
-            <span className="text-[11px] text-gray-600 shrink-0 group-hover:hidden">{formatDate(thread.date)}</span>
+            <span className="text-[11px] text-muted-foreground shrink-0 group-hover:hidden">{formatDate(thread.date)}</span>
             <div className="hidden group-hover:flex items-center gap-1 shrink-0">
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -67,7 +67,7 @@ export function MessageRow({ thread, active, checked, onSelect, onToggleCheck, o
                       e.stopPropagation();
                       onArchive?.();
                     }}
-                    className="p-1 rounded hover:bg-white/10 text-gray-400 hover:text-amber-400 cursor-pointer"
+                    className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-amber-500 cursor-pointer"
                   >
                     <Archive size={13} />
                   </span>
@@ -81,7 +81,7 @@ export function MessageRow({ thread, active, checked, onSelect, onToggleCheck, o
                       e.stopPropagation();
                       onLabel?.();
                     }}
-                    className="p-1 rounded hover:bg-white/10 text-gray-400 hover:text-blue-400 cursor-pointer"
+                    className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-primary cursor-pointer"
                   >
                     <Tag size={13} />
                   </span>
@@ -95,7 +95,7 @@ export function MessageRow({ thread, active, checked, onSelect, onToggleCheck, o
                       e.stopPropagation();
                       onDelete?.();
                     }}
-                    className="p-1 rounded hover:bg-white/10 text-gray-400 hover:text-red-400 cursor-pointer"
+                    className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-red-500 cursor-pointer"
                   >
                     <Trash2 size={13} />
                   </span>
@@ -105,13 +105,13 @@ export function MessageRow({ thread, active, checked, onSelect, onToggleCheck, o
             </div>
           </div>
 
-          <div className="text-[13px] text-gray-400 truncate mb-1.5">
-            <span className={thread.unread ? "text-gray-200 font-medium" : ""}>{thread.subject}</span>
-            {thread.snippet && <span className="text-gray-600"> — {thread.snippet}</span>}
+          <div className="text-[13px] text-muted-foreground truncate mb-1.5">
+            <span className={thread.unread ? "text-foreground font-medium" : ""}>{thread.subject}</span>
+            {thread.snippet && <span className="text-muted-foreground"> — {thread.snippet}</span>}
           </div>
 
           <div className="flex items-center gap-1.5">
-            {thread.unread && <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />}
+            {thread.unread && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
             {(thread.labelNames || []).slice(0, 2).map((label) => (
               <Badge key={label} variant="default">
                 {label}

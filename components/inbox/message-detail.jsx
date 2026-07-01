@@ -69,11 +69,11 @@ export function MessageDetail({ threadId }) {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <div className="p-6 border-b border-white/5 flex items-start justify-between gap-4">
+      <div className="p-6 border-b border-border flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-white font-semibold text-base mb-1">{thread?.subject}</h2>
-          <p className="text-gray-400 text-sm">{lastMessage?.from}</p>
-          <p className="text-gray-600 text-xs mt-1">{formatDate(lastMessage?.date)}</p>
+          <h2 className="text-foreground font-semibold text-base mb-1">{thread?.subject}</h2>
+          <p className="text-muted-foreground text-sm">{lastMessage?.from}</p>
+          <p className="text-muted-foreground text-xs mt-1">{formatDate(lastMessage?.date)}</p>
         </div>
         <div className="flex items-center gap-1 shrink-0">
           <Button variant="ghost" size="icon" onClick={() => act("archive")} title="Archive (e)">
@@ -91,9 +91,9 @@ export function MessageDetail({ threadId }) {
       <ScrollArea className="flex-1">
         <div className="p-6 space-y-6">
           {thread?.messages?.map((message) => (
-            <div key={message.id} className="border-b border-white/5 pb-6 last:border-0">
-              <p className="text-gray-500 text-xs mb-2">{message.from} · {formatDate(message.date)}</p>
-              <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">{message.body || message.snippet}</p>
+            <div key={message.id} className="border-b border-border pb-6 last:border-0">
+              <p className="text-muted-foreground text-xs mb-2">{message.from} · {formatDate(message.date)}</p>
+              <p className="text-foreground text-sm leading-relaxed whitespace-pre-wrap">{message.body || message.snippet}</p>
             </div>
           ))}
 

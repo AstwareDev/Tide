@@ -77,7 +77,7 @@ export default function ActivityPage() {
 
   if (entries.length === 0) {
     return (
-      <div className="h-full flex flex-col items-center justify-center text-gray-600">
+      <div className="h-full flex flex-col items-center justify-center text-muted-foreground">
         <Activity size={36} strokeWidth={1.25} className="mb-3" />
         <p className="text-sm font-medium">No activity yet</p>
         <p className="text-xs mt-1">Run your agents to see what they do here.</p>
@@ -93,7 +93,7 @@ export default function ActivityPage() {
 
         {Object.entries(groups).map(([date, items]) => (
           <div key={date}>
-            <div className="text-xs text-gray-600 font-medium uppercase tracking-wider mb-3">{date}</div>
+            <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-3">{date}</div>
             <div className="space-y-1">
               {items.map((entry) => (
                 <ActivityEntry key={entry.id} entry={entry} onUndo={handleUndo} />

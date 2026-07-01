@@ -12,7 +12,7 @@ const SelectTrigger = React.forwardRef(({ className, children, ...props }, ref) 
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-9 w-full items-center justify-between rounded-lg border border-input bg-white/5 px-3 py-2 text-sm outline-none focus:border-blue-500/60 disabled:cursor-not-allowed disabled:opacity-50",
+      "flex h-9 w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary/60 disabled:cursor-not-allowed disabled:opacity-50",
       className
     )}
     {...props}
@@ -30,7 +30,7 @@ const SelectContent = React.forwardRef(({ className, children, ...props }, ref) 
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-50 min-w-[8rem] overflow-hidden rounded-lg border border-white/10 bg-[#1a1d27] shadow-xl",
+        "relative z-50 min-w-[8rem] overflow-hidden rounded-lg border border-border bg-popover text-popover-foreground shadow-xl",
         className
       )}
       position="popper"
@@ -47,7 +47,7 @@ const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => 
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-pointer select-none items-center rounded-md py-1.5 pl-7 pr-2 text-sm text-gray-200 outline-none data-[highlighted]:bg-white/10",
+      "relative flex w-full cursor-pointer select-none items-center rounded-md py-1.5 pl-7 pr-2 text-sm text-popover-foreground outline-none data-[highlighted]:bg-accent",
       className
     )}
     {...props}

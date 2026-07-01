@@ -12,7 +12,7 @@ export function LabelPopover({ children, open, onOpenChange, onApply }) {
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent>
-        <p className="text-xs text-gray-500 mb-2">Apply label</p>
+        <p className="text-xs text-muted-foreground mb-2">Apply label</p>
         <form
           onSubmit={(e) => {
             e.preventDefault();

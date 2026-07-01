@@ -50,7 +50,7 @@ function AppShell({ children }) {
   );
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#0f1117]">
+    <div className="flex h-screen w-screen overflow-hidden bg-background">
       <NavRail />
       <div className="flex flex-col flex-1 min-w-0">
         <TopBar email={email} running={running} onRunNow={runNow} />

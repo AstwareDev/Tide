@@ -16,13 +16,13 @@ export function TopBar({ email, running, onRunNow }) {
   const title = Object.entries(TITLES).find(([prefix]) => pathname?.startsWith(prefix))?.[1] || "Tide";
 
   return (
-    <header className="h-14 shrink-0 flex items-center justify-between px-6 border-b border-white/5 bg-[#0f1117]">
-      <h1 className="text-white font-semibold text-base">{title}</h1>
+    <header className="h-14 shrink-0 flex items-center justify-between px-6 border-b border-border bg-background">
+      <h1 className="text-foreground font-semibold text-base">{title}</h1>
 
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-full">
           <div className="w-2 h-2 rounded-full bg-emerald-400" />
-          <span className="text-xs text-gray-300 max-w-[160px] truncate">{email}</span>
+          <span className="text-xs text-muted-foreground max-w-[160px] truncate">{email}</span>
         </div>
 
         <Button size="sm" className="rounded-full" onClick={onRunNow} disabled={running}>

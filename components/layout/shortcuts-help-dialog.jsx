@@ -27,8 +27,8 @@ export function ShortcutsHelpDialog({ open, onOpenChange }) {
         <div className="grid grid-cols-2 gap-y-2 gap-x-6 text-sm">
           {SHORTCUTS.map((s) => (
             <div key={s.keys} className="flex items-center justify-between gap-3 col-span-2 sm:col-span-1">
-              <span className="text-gray-400">{s.desc}</span>
-              <kbd className="text-[11px] bg-white/10 border border-white/10 rounded px-1.5 py-0.5 text-gray-300 whitespace-nowrap">
+              <span className="text-muted-foreground">{s.desc}</span>
+              <kbd className="text-[11px] bg-secondary border border-border rounded px-1.5 py-0.5 text-foreground whitespace-nowrap">
                 {s.keys}
               </kbd>
             </div>

@@ -1,4 +1,8 @@
-# Tide
+<p align="center">
+  <img src="public/logo-192.png" alt="Tide logo" width="96" height="96" />
+</p>
+
+<h1 align="center">Tide</h1>
 
 > A Gmail inbox that's more comfortable and addictive than Gmail itself — with passive AI agents that quietly label, archive, and delete the noise.
 

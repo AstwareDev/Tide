@@ -5,9 +5,15 @@
 <h1 align="center">Tide</h1>
 
 <p align="center">
-  <img src=".github/badges/website.svg" alt="Website — Visit Tide" width="200" />
-  <img src=".github/badges/source.svg" alt="Source on GitHub" width="200" />
-  <img src=".github/badges/license.svg" alt="License — MIT" width="200" />
+  <a href="https://tidemail.vercel.app/">
+    <img src=".github/badges/website.svg" alt="Website — Visit Tide" width="200" />
+  </a>
+  <a href="https://github.com/AstwareDev/Tide/archive/refs/heads/main.zip">
+    <img src=".github/badges/source.svg" alt="Source on GitHub" width="200" />
+  </a>
+  <a href="https://github.com/AstwareDev/Tide/LICENSE">
+    <img src=".github/badges/license.svg" alt="License — MIT" width="200" />
+  </a>
 </p>
 
 > A Gmail inbox that's more comfortable and addictive than Gmail itself — with passive AI agents that quietly label, archive, and delete the noise.

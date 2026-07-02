@@ -1,16 +1,9 @@
-<p align="center">
-  <img src="public/logo-192.png" alt="Tide logo" width="96" />
-</p>
 
-<h1 align="center">Tide</h1>
+<img src="public/logo-192.png" alt="Tide logo" width="96" />
 
-<p align="center">
-  <img src=".github/badges/website.svg" alt="Website — Visit Tide" />
-  <img src=".github/badges/source.svg" alt="Source — AstwareDev/Tide" />
-  <img src=".github/badges/license.svg" alt="License — MIT" />
-</p>
+# Tide
 
-> A Gmail inbox that's more comfortable and addictive than Gmail itself — with passive AI agents that quietly label, archive, and delete the noise.
+<img src=".github/badges/website.svg" alt="Website — Visit Tide" width="200" /><img src=".github/badges/source.svg" alt="Source on GitHub" width="200" /><img src=".github/badges/license.svg" alt="License — MIT" width="200" />> A Gmail inbox that's more comfortable and addictive than Gmail itself — with passive AI agents that quietly label, archive, and delete the noise.
 
 ## What is Tide?
 

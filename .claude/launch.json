@@ -6,12 +6,6 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 3000
-    },
-    {
-      "name": "badge-preview",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "serve", ".github/badges", "-l", "4321"],
-      "port": 4321
     }
   ]
 }

@@ -1,8 +1,14 @@
-<img src="public/logo-192.png" alt="Tide logo" width="131" />
+<p align="center">
+  <img src="public/logo-192.png" alt="Tide logo" width="131" />
+</p>
 
-# Tide
+<h1 align="center">Tide</h1>
 
-<img src=".github/badges/website.svg" alt="Website — Visit Tide" width="200" /> <img src=".github/badges/source.svg" alt="Source on GitHub" width="200" /> <img src=".github/badges/license.svg" alt="License — MIT" width="200" />
+<p align="center">
+  <img src=".github/badges/website.svg" alt="Website — Visit Tide" width="200" />
+  <img src=".github/badges/source.svg" alt="Source on GitHub" width="200" />
+  <img src=".github/badges/license.svg" alt="License — MIT" width="200" />
+</p>
 
 > A Gmail inbox that's more comfortable and addictive than Gmail itself — with passive AI agents that quietly label, archive, and delete the noise.
 

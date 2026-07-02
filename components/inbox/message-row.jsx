@@ -31,10 +31,10 @@ function initials(from) {
 }
 
 // Cascades through candidate image sources (People API contact photo →
-// Gravatar → domain favicon) advancing to the next one whenever a source
+// domain favicon → Gravatar) advancing to the next one whenever a source
 // fails to load, only falling back to initials once all are exhausted.
 function SenderAvatar({ avatarUrl, from, pending, senderName }) {
-  const candidates = pending ? [] : [avatarUrl, gravatarUrl(from), faviconUrl(from)].filter(Boolean);
+  const candidates = pending ? [] : [avatarUrl, faviconUrl(from), gravatarUrl(from)].filter(Boolean);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {

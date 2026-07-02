@@ -2,11 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Search, Mail, MailOpen, Archive, Trash2, Tag, Plus } from "lucide-react";
+import { Search, Mail, MailOpen, Archive, Trash2, Tag } from "lucide-react";
 import { toast } from "sonner";
 import { MessageRow } from "@/components/inbox/message-row";
 import { EmptyInbox } from "@/components/inbox/empty-states";
-import { LabelPopover } from "@/components/inbox/label-popover";
 import {
   ContextMenu,
   ContextMenuTrigger,
@@ -24,6 +23,7 @@ import { useUndoStack } from "@/hooks/use-undo-stack";
 import { api } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
 import { extractEmail } from "@/lib/gravatar";
+import { useInboxFilter } from "@/components/inbox/inbox-filter-context";
 
 export function MessageList() {
   const router = useRouter();
@@ -34,13 +34,14 @@ export function MessageList() {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const [checked, setChecked] = useState(new Set());
-  const [labelPopoverFor, setLabelPopoverFor] = useState(null);
   const [removingIds, setRemovingIds] = useState(new Set());
   const [labels, setLabels] = useState([]);
   const [avatarMap, setAvatarMap] = useState({});
   const [pendingAvatars, setPendingAvatars] = useState(new Set());
   const fetchedAvatarEmails = useRef(new Set());
   const { pushUndoable } = useUndoStack();
+  const { setLabels: setContextLabels, setThreads: setContextThreads, selectedLabelIds, showUnreadOnly } =
+    useInboxFilter();
 
   const activeThreadId = pathname?.match(/^\/inbox\/([^/]+)/)?.[1] || null;
 
@@ -64,11 +65,37 @@ export function MessageList() {
   useEffect(() => {
     api.gmail
       .labels()
-      .then((data) => setLabels(data.labels || []))
+      .then((data) => {
+        setLabels(data.labels || []);
+        setContextLabels(data.labels || []);
+      })
       .catch(() => {});
-  }, []);
+  }, [setContextLabels]);
 
   const userLabels = useMemo(() => labels.filter((l) => l.type === "user"), [labels]);
+
+  const labelById = useMemo(() => new Map(labels.map((l) => [l.id, l])), [labels]);
+
+  // Gmail's thread summaries only carry labelIds — resolve them to display
+  // names here now that both threads and labels have loaded.
+  const threadsWithLabelNames = useMemo(
+    () =>
+      threads.map((t) => {
+        const userLabelsForThread = (t.labelIds || [])
+          .map((id) => labelById.get(id))
+          .filter((l) => l?.type === "user");
+        return {
+          ...t,
+          labelNames: userLabelsForThread.map((l) => l.name),
+          labelBadges: userLabelsForThread,
+        };
+      }),
+    [threads, labelById]
+  );
+
+  useEffect(() => {
+    setContextThreads(threadsWithLabelNames);
+  }, [threadsWithLabelNames, setContextThreads]);
 
   useEffect(() => {
     const newEmails = [...new Set(threads.map((t) => extractEmail(t.from)).filter(Boolean))].filter(
@@ -101,13 +128,15 @@ export function MessageList() {
 
   const filtered = useMemo(
     () =>
-      threads.filter(
-        (t) =>
-          !query ||
-          t.subject?.toLowerCase().includes(query.toLowerCase()) ||
-          t.from?.toLowerCase().includes(query.toLowerCase())
-      ),
-    [threads, query]
+      threadsWithLabelNames.filter((t) => {
+        if (query && !t.subject?.toLowerCase().includes(query.toLowerCase()) && !t.from?.toLowerCase().includes(query.toLowerCase())) {
+          return false;
+        }
+        if (showUnreadOnly && !t.unread) return false;
+        if (selectedLabelIds.size > 0 && !t.labelIds?.some((id) => selectedLabelIds.has(id))) return false;
+        return true;
+      }),
+    [threadsWithLabelNames, query, showUnreadOnly, selectedLabelIds]
   );
 
   useEffect(() => {
@@ -176,7 +205,6 @@ export function MessageList() {
       e: () => filtered[activeIndex] && performAction(filtered[activeIndex], "archive"),
       "#": () => filtered[activeIndex] && performAction(filtered[activeIndex], "delete"),
       Backspace: () => filtered[activeIndex] && performAction(filtered[activeIndex], "delete"),
-      l: () => filtered[activeIndex] && setLabelPopoverFor(filtered[activeIndex].id),
       x: () =>
         filtered[activeIndex] &&
         setChecked((prev) => {
@@ -231,90 +259,77 @@ export function MessageList() {
             {filtered.map((thread, i) => {
               const removing = removingIds.has(thread.id);
               return (
-                <LabelPopover
+                <div
                   key={thread.id}
-                  open={labelPopoverFor === thread.id}
-                  onOpenChange={(o) => setLabelPopoverFor(o ? thread.id : null)}
-                  onApply={(labelName) => {
-                    performAction(thread, "label", labelName);
-                    setLabelPopoverFor(null);
-                  }}
+                  className={cn(
+                    removing
+                      ? "animate-out fade-out slide-out-to-left-4 fill-mode-forwards pointer-events-none"
+                      : "animate-in fade-in slide-in-from-top-1 fill-mode-both"
+                  )}
+                  style={{ animationDelay: removing ? "0ms" : `${Math.min(i, 12) * 25}ms`, animationDuration: "200ms" }}
                 >
-                  <div
-                    className={cn(
-                      removing
-                        ? "animate-out fade-out slide-out-to-left-4 fill-mode-forwards pointer-events-none"
-                        : "animate-in fade-in slide-in-from-top-1 fill-mode-both"
-                    )}
-                    style={{ animationDelay: removing ? "0ms" : `${Math.min(i, 12) * 25}ms`, animationDuration: "200ms" }}
-                  >
-                    <ContextMenu>
-                      <ContextMenuTrigger asChild>
-                        <MessageRow
-                          thread={thread}
-                          avatarUrl={avatarMap[extractEmail(thread.from)]}
-                          avatarPending={pendingAvatars.has(extractEmail(thread.from))}
-                          active={activeThreadId === thread.id || (i === activeIndex && !activeThreadId)}
-                          checked={checked.has(thread.id)}
-                          onSelect={() => {
-                            setActiveIndex(i);
-                            openThread(thread.id);
-                          }}
-                          onToggleCheck={() =>
-                            setChecked((prev) => {
-                              const next = new Set(prev);
-                              next.has(thread.id) ? next.delete(thread.id) : next.add(thread.id);
-                              return next;
-                            })
-                          }
-                        />
-                      </ContextMenuTrigger>
-                      <ContextMenuContent>
-                        <ContextMenuItem
-                          onClick={() => {
-                            setActiveIndex(i);
-                            openThread(thread.id);
-                          }}
-                        >
-                          <Mail size={14} /> Open
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                          onClick={() => performAction(thread, thread.unread ? "markRead" : "markUnread")}
-                        >
-                          {thread.unread ? <MailOpen size={14} /> : <Mail size={14} />}
-                          Mark as {thread.unread ? "read" : "unread"}
-                        </ContextMenuItem>
-                        <ContextMenuItem onClick={() => performAction(thread, "archive")}>
-                          <Archive size={14} /> Archive
-                        </ContextMenuItem>
-                        <ContextMenuSeparator />
-                        <ContextMenuSub>
-                          <ContextMenuSubTrigger>
-                            <Tag size={14} /> Label
-                          </ContextMenuSubTrigger>
-                          <ContextMenuSubContent>
-                            {userLabels.length === 0 && (
-                              <div className="px-2 py-1.5 text-xs text-muted-foreground">No labels yet</div>
-                            )}
-                            {userLabels.map((label) => (
-                              <ContextMenuItem key={label.id} onClick={() => performAction(thread, "label", label.name)}>
-                                {label.name}
-                              </ContextMenuItem>
-                            ))}
-                            {userLabels.length > 0 && <ContextMenuSeparator />}
-                            <ContextMenuItem onClick={() => setLabelPopoverFor(thread.id)}>
-                              <Plus size={14} /> New label…
+                  <ContextMenu>
+                    <ContextMenuTrigger asChild>
+                      <MessageRow
+                        thread={thread}
+                        avatarUrl={avatarMap[extractEmail(thread.from)]}
+                        avatarPending={pendingAvatars.has(extractEmail(thread.from))}
+                        active={activeThreadId === thread.id || (i === activeIndex && !activeThreadId)}
+                        checked={checked.has(thread.id)}
+                        onSelect={() => {
+                          setActiveIndex(i);
+                          openThread(thread.id);
+                        }}
+                        onToggleCheck={() =>
+                          setChecked((prev) => {
+                            const next = new Set(prev);
+                            next.has(thread.id) ? next.delete(thread.id) : next.add(thread.id);
+                            return next;
+                          })
+                        }
+                      />
+                    </ContextMenuTrigger>
+                    <ContextMenuContent>
+                      <ContextMenuItem
+                        onClick={() => {
+                          setActiveIndex(i);
+                          openThread(thread.id);
+                        }}
+                      >
+                        <Mail size={14} /> Open
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        onClick={() => performAction(thread, thread.unread ? "markRead" : "markUnread")}
+                      >
+                        {thread.unread ? <MailOpen size={14} /> : <Mail size={14} />}
+                        Mark as {thread.unread ? "read" : "unread"}
+                      </ContextMenuItem>
+                      <ContextMenuItem onClick={() => performAction(thread, "archive")}>
+                        <Archive size={14} /> Archive
+                      </ContextMenuItem>
+                      <ContextMenuSeparator />
+                      <ContextMenuSub>
+                        <ContextMenuSubTrigger>
+                          <Tag size={14} /> Label
+                        </ContextMenuSubTrigger>
+                        <ContextMenuSubContent>
+                          {userLabels.length === 0 && (
+                            <div className="px-2 py-1.5 text-xs text-muted-foreground">No labels yet</div>
+                          )}
+                          {userLabels.map((label) => (
+                            <ContextMenuItem key={label.id} onClick={() => performAction(thread, "label", label.name)}>
+                              {label.name}
                             </ContextMenuItem>
-                          </ContextMenuSubContent>
-                        </ContextMenuSub>
-                        <ContextMenuSeparator />
-                        <ContextMenuItem destructive onClick={() => performAction(thread, "delete")}>
-                          <Trash2 size={14} /> Delete
-                        </ContextMenuItem>
-                      </ContextMenuContent>
-                    </ContextMenu>
-                  </div>
-                </LabelPopover>
+                          ))}
+                        </ContextMenuSubContent>
+                      </ContextMenuSub>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem destructive onClick={() => performAction(thread, "delete")}>
+                        <Trash2 size={14} /> Delete
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
+                </div>
               );
             })}
           </div>

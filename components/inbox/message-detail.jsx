@@ -4,23 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Archive, Trash2, X } from "lucide-react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
-import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AgentDecisionCard } from "@/components/inbox/agent-decision-card";
+import { MessageBody } from "@/components/inbox/message-body";
 import { api } from "@/lib/api-client";
-
-const sanitizeSchema = {
-  ...defaultSchema,
-  attributes: {
-    ...defaultSchema.attributes,
-    "*": [...(defaultSchema.attributes?.["*"] || []), "style", "className"],
-  },
-};
 
 function formatDate(ms) {
   if (!ms) return "";
@@ -109,14 +98,7 @@ export function MessageDetail({ threadId }) {
               style={{ animationDelay: `${Math.min(i, 8) * 40}ms`, animationDuration: "220ms" }}
             >
               <p className="text-muted-foreground text-xs mb-2">{message.from} · {formatDate(message.date)}</p>
-              <div className="message-body prose prose-sm dark:prose-invert max-w-none text-foreground text-sm leading-relaxed">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
-                >
-                  {message.body || message.snippet}
-                </ReactMarkdown>
-              </div>
+              <MessageBody body={message.body || message.snippet} bodyType={message.bodyType} />
             </div>
           ))}
 

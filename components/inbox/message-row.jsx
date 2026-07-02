@@ -5,6 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { gravatarUrl, faviconUrl, avatarColor } from "@/lib/gravatar";
+import { getLabelColor } from "@/lib/label-colors";
 import { cn } from "@/lib/utils";
 
 const ACTION_BADGE_VARIANT = {
@@ -111,11 +112,18 @@ export const MessageRow = forwardRef(function MessageRow(
 
           <div className="flex items-center gap-1.5">
             {thread.unread && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
-            {(thread.labelNames || []).slice(0, 2).map((label) => (
-              <Badge key={label} variant="default">
-                {label}
-              </Badge>
-            ))}
+            {(thread.labelBadges || []).slice(0, 3).map((label) => {
+              const color = getLabelColor(label);
+              return (
+                <span
+                  key={label.id}
+                  className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
+                  style={{ backgroundColor: color.bg, color: color.text }}
+                >
+                  {label.name}
+                </span>
+              );
+            })}
             {thread.classification && (
               <Tooltip>
                 <TooltipTrigger asChild>

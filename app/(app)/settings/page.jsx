@@ -13,7 +13,7 @@ import { api } from "@/lib/api-client";
 export default function SettingsPage() {
   const router = useRouter();
   const [email, setEmail] = useState(null);
-  const [settings, setSettings] = useState({ pollingIntervalMs: 300000, openrouterKeyConfigured: false });
+  const [settings, setSettings] = useState({ pollingIntervalMs: 300000, geminiKeyConfigured: false });
 
   useEffect(() => {
     api.auth.status().then((s) => setEmail(s.email)).catch(() => {});
@@ -46,13 +46,13 @@ export default function SettingsPage() {
               <SettingRow icon={Cpu} label="AI Provider" description="The SDK used to run email classification agents">
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-lg">
                   <div className="w-2 h-2 rounded-full bg-primary" />
-                  <span className="text-xs text-muted-foreground">OpenRouter</span>
+                  <span className="text-xs text-muted-foreground">Google Gemini</span>
                 </div>
               </SettingRow>
 
-              <SettingRow icon={Key} label="API Key" description="Set OPENROUTER_API_KEY in your Vercel project's environment variables">
+              <SettingRow icon={Key} label="API Key" description="Set GEMINI_API_KEY in your Vercel project's environment variables">
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-lg">
-                  {settings.openrouterKeyConfigured ? (
+                  {settings.geminiKeyConfigured ? (
                     <>
                       <Check size={13} className="text-emerald-500" />
                       <span className="text-xs text-muted-foreground">Configured</span>

@@ -1,10 +1,10 @@
 "use client";
 
-import { forwardRef } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { gravatarUrl, avatarColor } from "@/lib/gravatar";
+import { gravatarUrl, faviconUrl, avatarColor } from "@/lib/gravatar";
 import { cn } from "@/lib/utils";
 
 const ACTION_BADGE_VARIANT = {
@@ -29,8 +29,40 @@ function initials(from) {
   return (parts[0][0] + (parts[1]?.[0] || "")).toUpperCase();
 }
 
+// Cascades through candidate image sources (People API contact photo →
+// Gravatar → domain favicon) advancing to the next one whenever a source
+// fails to load, only falling back to initials once all are exhausted.
+function SenderAvatar({ avatarUrl, from, pending, senderName }) {
+  const candidates = pending ? [] : [avatarUrl, gravatarUrl(from), faviconUrl(from)].filter(Boolean);
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    setIndex(0);
+  }, [avatarUrl, from, pending]);
+
+  const src = candidates[index];
+
+  return (
+    <Avatar className="mt-0.5 h-9 w-9 ring-1 ring-border">
+      {src && (
+        <AvatarImage
+          key={src}
+          src={src}
+          alt=""
+          onLoadingStatusChange={(status) => {
+            if (status === "error") setIndex((i) => i + 1);
+          }}
+        />
+      )}
+      <AvatarFallback style={{ backgroundColor: avatarColor(senderName), color: "#fff" }}>
+        {initials(from)}
+      </AvatarFallback>
+    </Avatar>
+  );
+}
+
 export const MessageRow = forwardRef(function MessageRow(
-  { thread, active, checked, onSelect, onToggleCheck },
+  { thread, avatarUrl, avatarPending, active, checked, onSelect, onToggleCheck },
   ref
 ) {
   const senderName = thread.from?.split("<")[0].trim() || thread.from || "Unknown";
@@ -57,12 +89,7 @@ export const MessageRow = forwardRef(function MessageRow(
           onClick={(e) => e.stopPropagation()}
           className="mt-2 shrink-0 accent-primary"
         />
-        <Avatar className="mt-0.5 h-9 w-9 ring-1 ring-border">
-          <AvatarImage src={gravatarUrl(thread.from) || undefined} alt="" />
-          <AvatarFallback style={{ backgroundColor: avatarColor(senderName), color: "#fff" }}>
-            {initials(thread.from)}
-          </AvatarFallback>
-        </Avatar>
+        <SenderAvatar avatarUrl={avatarUrl} from={thread.from} pending={avatarPending} senderName={senderName} />
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2 mb-0.5">

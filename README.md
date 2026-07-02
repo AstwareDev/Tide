@@ -8,7 +8,7 @@
 
 ## What is Tide?
 
-Tide is a personal, single-user Next.js web app deployed on Vercel. It connects to your Gmail account and gives you a fast, keyboard-driven, thread-grouped inbox (3-pane layout, always-on reading pane, `j`/`k`/`e`/`#`/`l` triage shortcuts, a `⌘K` command palette) — and runs background AI agents that classify unlabeled emails using an LLM (via OpenRouter) and act on your behalf.
+Tide is a personal, single-user Next.js web app deployed on Vercel. It connects to your Gmail account and gives you a fast, keyboard-driven, thread-grouped inbox (3-pane layout, always-on reading pane, `j`/`k`/`e`/`#`/`l` triage shortcuts, a `⌘K` command palette) — and runs background AI agents that classify unlabeled emails using an LLM (via Google Gemini) and act on your behalf.
 
 You define the rules. The agents do the work. The inbox itself is designed to be the reason you keep coming back.
 
@@ -24,7 +24,7 @@ You define the rules. The agents do the work. The inbox itself is designed to be
 - **Node.js** ≥ 20
 - **A Vercel account** with a KV (Redis) store attached to the project
 - **A Google Cloud project** with the Gmail API enabled and a **Web application** OAuth2 client
-- **An OpenRouter API key** — get one at [openrouter.ai/keys](https://openrouter.ai/keys)
+- **A Gemini API key** (free tier) — get one at [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
 
 ---
 
@@ -49,8 +49,8 @@ Copy `.env.example` to `.env.local` and fill in:
 ```
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
-OPENROUTER_API_KEY=
-OPENROUTER_MODEL=anthropic/claude-sonnet-4.5   # any OpenRouter model slug
+GEMINI_API_KEY=
+GEMINI_MODEL=gemini-2.0-flash   # any Gemini model slug (free tier: gemini-2.0-flash, gemini-2.5-flash-lite)
 SESSION_SECRET=            # any long random string
 CRON_SECRET=               # any long random string
 KV_REST_API_URL=           # from your Vercel KV / Upstash Redis integration
@@ -152,8 +152,8 @@ tracked in KV to avoid re-classifying. The same cycle can be triggered manually 
 
 ## Privacy
 
-- Email content is sent to **OpenRouter** (and whichever model you configure) for classification only.
-- OAuth tokens and the OpenRouter API key never reach the browser — tokens live in Vercel KV, the API key is a
+- Email content is sent to **Google Gemini** (and whichever model you configure) for classification only.
+- OAuth tokens and the Gemini API key never reach the browser — tokens live in Vercel KV, the API key is a
   server-only environment variable.
 - No third-party analytics.
 

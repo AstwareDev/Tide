@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Search, Mail, MailOpen, Archive, Trash2, Tag, Plus } from "lucide-react";
 import { toast } from "sonner";
@@ -23,6 +23,7 @@ import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts";
 import { useUndoStack } from "@/hooks/use-undo-stack";
 import { api } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
+import { extractEmail } from "@/lib/gravatar";
 
 export function MessageList() {
   const router = useRouter();
@@ -36,6 +37,9 @@ export function MessageList() {
   const [labelPopoverFor, setLabelPopoverFor] = useState(null);
   const [removingIds, setRemovingIds] = useState(new Set());
   const [labels, setLabels] = useState([]);
+  const [avatarMap, setAvatarMap] = useState({});
+  const [pendingAvatars, setPendingAvatars] = useState(new Set());
+  const fetchedAvatarEmails = useRef(new Set());
   const { pushUndoable } = useUndoStack();
 
   const activeThreadId = pathname?.match(/^\/inbox\/([^/]+)/)?.[1] || null;
@@ -65,6 +69,35 @@ export function MessageList() {
   }, []);
 
   const userLabels = useMemo(() => labels.filter((l) => l.type === "user"), [labels]);
+
+  useEffect(() => {
+    const newEmails = [...new Set(threads.map((t) => extractEmail(t.from)).filter(Boolean))].filter(
+      (e) => !fetchedAvatarEmails.current.has(e)
+    );
+    if (!newEmails.length) return;
+    newEmails.forEach((e) => fetchedAvatarEmails.current.add(e));
+
+    // Avatars stay pending (no Gravatar shown yet) until the People API lookup
+    // — including its retries on failure — resolves, so Gravatar is only ever
+    // used once that has genuinely given up.
+    setPendingAvatars((prev) => {
+      const next = new Set(prev);
+      newEmails.forEach((e) => next.add(e));
+      return next;
+    });
+
+    api.gmail
+      .avatars(newEmails)
+      .then((data) => setAvatarMap((prev) => ({ ...prev, ...data.avatars })))
+      .catch(() => {})
+      .finally(() => {
+        setPendingAvatars((prev) => {
+          const next = new Set(prev);
+          newEmails.forEach((e) => next.delete(e));
+          return next;
+        });
+      });
+  }, [threads]);
 
   const filtered = useMemo(
     () =>
@@ -219,6 +252,8 @@ export function MessageList() {
                       <ContextMenuTrigger asChild>
                         <MessageRow
                           thread={thread}
+                          avatarUrl={avatarMap[extractEmail(thread.from)]}
+                          avatarPending={pendingAvatars.has(extractEmail(thread.from))}
                           active={activeThreadId === thread.id || (i === activeIndex && !activeThreadId)}
                           checked={checked.has(thread.id)}
                           onSelect={() => {

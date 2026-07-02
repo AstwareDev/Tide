@@ -31,8 +31,14 @@
   <rect x="12" y="10" width="276" height="64" rx="17" fill="url(#bg)" filter="url(#lift)"/>
   <rect x="12.75" y="10.75" width="274.5" height="62.5" rx="16.25" fill="none" stroke="url(#border)" stroke-width="1.5"/>
   <rect x="17" y="13" width="266" height="26" rx="13" fill="url(#gloss)"/>
-  <rect x="126" y="26" width="1.2" height="32" fill="url(#divider)"/>
+  <rect x="120" y="26" width="1.2" height="32" fill="url(#divider)"/>
   <text x="40" y="46" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="500" letter-spacing="3" fill="#8b8b90">LICENSE</text>
-  <circle cx="150" cy="42" r="4.5" fill="url(#gold)"/>
-  <text x="164" y="50" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" letter-spacing="2" fill="#ffffff">MIT</text>
+  <g transform="translate(138,31)">
+    <path d="M2 2 a2 2 0 0 1 2 -2 h8 l6 6 v13 a2 2 0 0 1 -2 2 h-12 a2 2 0 0 1 -2 -2 z" fill="url(#gold)"/>
+    <path d="M12 0 v4 a2 2 0 0 0 2 2 h4" fill="none" stroke="#0d0d0f" stroke-width="1.1"/>
+    <rect x="4.5" y="9" width="9" height="1.5" rx="0.75" fill="#0d0d0f"/>
+    <rect x="4.5" y="12.5" width="9" height="1.5" rx="0.75" fill="#0d0d0f"/>
+    <rect x="4.5" y="16" width="6" height="1.5" rx="0.75" fill="#0d0d0f"/>
+  </g>
+  <text x="166" y="50" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" letter-spacing="2" fill="#ffffff">MIT</text>
 </svg>

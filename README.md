@@ -1,10 +1,6 @@
-<p align="center">
-  <img src="public/logo-192.png" alt="Tide logo" width="96" height="96" />
-</p>
+<img src="public/logo-192.png" alt="Tide logo" width="96" />\# Tide
 
-<h1 align="center">Tide</h1>
-
-> A Gmail inbox that's more comfortable and addictive than Gmail itself — with passive AI agents that quietly label, archive, and delete the noise.
+![Website — Visit Tide](.github/badges/website.svg)![Source — AstwareDev/Tide](.github/badges/source.svg)![License — MIT](.github/badges/license.svg)&gt; A Gmail inbox that's more comfortable and addictive than Gmail itself — with passive AI agents that quietly label, archive, and delete the noise.
 
 ## What is Tide?
 
@@ -13,6 +9,7 @@ Tide is a personal, single-user Next.js web app deployed on Vercel. It connects 
 You define the rules. The agents do the work. The inbox itself is designed to be the reason you keep coming back.
 
 **Default agents out of the box:**
+
 - **Education Labeler** — labels emails from courses, universities, or learning platforms as `Education`
 - **Ads Deleter** — trashes promotional and marketing emails
 - **Stale Security Notification Deleter** — removes one-time alerts like "new sign-in detected" or "password changed successfully"
@@ -32,12 +29,10 @@ You define the rules. The agents do the work. The inbox itself is designed to be
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com) and create/select a project.
 2. **APIs & Services → Library** → enable **Gmail API**.
-3. **APIs & Services → OAuth consent screen**: choose External, add the scope
-   `https://www.googleapis.com/auth/gmail.modify`, and add your own Gmail address as a test user.
+3. **APIs & Services → OAuth consent screen**: choose External, add the scope `https://www.googleapis.com/auth/gmail.modify`, and add your own Gmail address as a test user.
 4. **APIs & Services → Credentials → Create Credentials → OAuth client ID**:
    - Application type: **Web application** (not Desktop — this now runs as a real backend)
-   - Authorized redirect URIs: `https://<your-vercel-domain>/api/auth/callback` and, for local dev,
-     `http://localhost:3000/api/auth/callback`
+   - Authorized redirect URIs: `https://<your-vercel-domain>/api/auth/callback` and, for local dev, `http://localhost:3000/api/auth/callback`
 5. Copy the **Client ID** and **Client Secret**.
 
 ---
@@ -84,7 +79,7 @@ vercel deploy
 ## Keyboard Shortcuts
 
 | Key | Action |
-|---|---|
+| --- | --- |
 | `j` / `k` | Navigate rows |
 | `Enter` / `o` | Open in reading pane |
 | `e` | Archive + advance |
@@ -103,7 +98,7 @@ vercel deploy
 Agents are configured in the **Agents** screen (a slide-over editor with a live preview against your recent inbox). Each agent has:
 
 | Field | Description |
-|---|---|
+| --- | --- |
 | **Name** | Display name for the agent |
 | **Prompt** | Natural language instruction — describe what kind of email this agent should handle |
 | **Action** | `label`, `archive`, or `delete` |
@@ -139,22 +134,16 @@ Agents default to no-match ("skip") when uncertain — a conservative prompt is 
 └──────────────────────────────────────────────────────────────┘
 ```
 
-**OAuth2 flow:** clicking "Connect Gmail" redirects to Google's consent screen; Google redirects back to
-`/api/auth/callback`, which exchanges the code for tokens, stores them in Vercel KV, and sets a signed session
-cookie that gates the rest of the app (this is a single-user deployment — the cookie is a lock on the front door,
-not a multi-tenant identity system).
+**OAuth2 flow:** clicking "Connect Gmail" redirects to Google's consent screen; Google redirects back to `/api/auth/callback`, which exchanges the code for tokens, stores them in Vercel KV, and sets a signed session cookie that gates the rest of the app (this is a single-user deployment — the cookie is a lock on the front door, not a multi-tenant identity system).
 
-**Agent cycle:** every 5 minutes (via Vercel Cron), `/api/cron` fetches up to 100 unlabeled threads, classifies
-each with Claude via the Vercel AI SDK, and applies the first matching agent's action. Processed message IDs are
-tracked in KV to avoid re-classifying. The same cycle can be triggered manually from the UI ("Run Now").
+**Agent cycle:** every 5 minutes (via Vercel Cron), `/api/cron` fetches up to 100 unlabeled threads, classifies each with Claude via the Vercel AI SDK, and applies the first matching agent's action. Processed message IDs are tracked in KV to avoid re-classifying. The same cycle can be triggered manually from the UI ("Run Now").
 
 ---
 
 ## Privacy
 
 - Email content is sent to **Google Gemini** (and whichever model you configure) for classification only.
-- OAuth tokens and the Gemini API key never reach the browser — tokens live in Vercel KV, the API key is a
-  server-only environment variable.
+- OAuth tokens and the Gemini API key never reach the browser — tokens live in Vercel KV, the API key is a server-only environment variable.
 - No third-party analytics.
 
 ---

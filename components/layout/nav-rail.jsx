@@ -16,17 +16,19 @@ export function NavRail() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-[220px] shrink-0 flex flex-col bg-background border-r border-border py-4">
-      <div className="px-5 mb-6">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg overflow-hidden flex items-center justify-center">
-            <img src="/tide.png" alt="Tide" className="w-full h-full object-cover" />
+    <aside className="flex w-[260px] shrink-0 flex-col border-r border-border/40 bg-background/50 py-6 backdrop-blur-2xl">
+      <div className="mb-8 px-6">
+        <div className="group flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80">
+          <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-background to-secondary shadow-[0_2px_10px_-3px_rgba(0,0,0,0.1)] ring-1 ring-border/60 transition-transform duration-300 ease-out group-hover:scale-105">
+            <img src="/tide.png" alt="Tide" className="h-full w-full object-cover" />
           </div>
-          <span className="text-foreground font-semibold text-[15px] tracking-tight">Tide</span>
+          <span className="text-[17px] font-semibold tracking-tight text-foreground">
+            Tide
+          </span>
         </div>
       </div>
 
-      <nav className="flex-1 flex flex-col gap-0.5 px-2">
+      <nav className="flex flex-1 flex-col gap-1.5 px-3">
         {NAV.map(({ href, icon: Icon, label }) => {
           const active = pathname?.startsWith(href);
           return (
@@ -34,19 +36,37 @@ export function NavRail() {
               key={href}
               href={href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
-                active ? "bg-primary text-primary-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                "group relative flex items-center gap-3 overflow-hidden rounded-xl px-4 py-3 text-sm transition-all duration-300 ease-out active:scale-[0.98]",
+                active
+                  ? "bg-foreground text-background shadow-md"
+                  : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
               )}
             >
-              <Icon size={16} strokeWidth={1.75} />
-              {label}
+              <Icon 
+                size={18} 
+                strokeWidth={active ? 2 : 1.75} 
+                className={cn(
+                  "transition-transform duration-300 ease-out group-hover:scale-110",
+                  active ? "text-background" : "text-muted-foreground group-hover:text-foreground"
+                )} 
+              />
+              <span className={cn("font-medium tracking-wide", active ? "font-semibold" : "")}>
+                {label}
+              </span>
+              {active && (
+                <div className="absolute inset-0 -z-10 bg-gradient-to-r from-transparent to-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              )}
             </Link>
           );
         })}
       </nav>
 
-      <div className="px-5 mt-4">
-        <div className="text-[11px] text-muted-foreground">v0.1.0</div>
+      <div className="mt-4 px-6 pb-2">
+        <div className="inline-flex items-center rounded-full border border-border/50 bg-secondary/30 px-2.5 py-1 backdrop-blur-sm transition-colors hover:bg-secondary/50">
+          <span className="text-[11px] font-medium tracking-wider text-muted-foreground/70">
+            v0.1.0
+          </span>
+        </div>
       </div>
     </aside>
   );

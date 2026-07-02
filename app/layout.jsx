@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Toaster } from "sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata = {
   title: "Tide",
@@ -15,8 +16,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        {children}
-        <Toaster theme="light" position="bottom-right" richColors />
+        <TooltipProvider>
+          {children}
+          <Toaster theme="light" position="bottom-right" richColors />
+        </TooltipProvider>
       </body>
     </html>
   );

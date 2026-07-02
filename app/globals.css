@@ -28,7 +28,6 @@
 }
 
 :root {
-  --sidebar-width: 220px;
   --radius: 0.75rem;
 
   --background: #ffffff;
@@ -50,11 +49,6 @@
   --border: #dde6f0;
   --input: #dde6f0;
   --ring: #1669c1;
-
-  --brand-teal: #7fb9cf;
-  --brand-blue: #1669c1;
-  --brand-deep: #0d3d75;
-  --brand-gradient: linear-gradient(135deg, #8fc3d8 0%, #1e6fb8 55%, #0d3d75 100%);
 }
 
 * {
@@ -74,28 +68,6 @@ body {
   background: var(--background);
   color: var(--foreground);
   overflow: hidden;
-}
-
-.brand-gradient {
-  background: var(--brand-gradient);
-}
-
-.brand-wave-bg {
-  position: relative;
-  background: #ffffff;
-}
-
-.brand-wave-bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.5;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220' preserveAspectRatio='none'%3E%3Cpath d='M0 110 C 240 40, 480 180, 720 100 S 1200 40, 1440 110 V220 H0 Z' fill='%23e7f1fb'/%3E%3Cpath d='M0 150 C 240 90, 480 210, 720 140 S 1200 90, 1440 150 V220 H0 Z' fill='%23dceaf7'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: bottom;
-  background-size: 100% auto;
 }
 
 ::-webkit-scrollbar {

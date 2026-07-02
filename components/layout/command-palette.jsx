@@ -9,7 +9,15 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandItem,
+  CommandSeparator,
 } from "@/components/ui/command";
+
+const NAV_ITEMS = [
+  { href: "/inbox", icon: Inbox, label: "Go to Inbox" },
+  { href: "/agents", icon: Bot, label: "Go to Agents" },
+  { href: "/activity", icon: Activity, label: "Go to Activity" },
+  { href: "/settings", icon: Settings, label: "Go to Settings" },
+];
 
 export function CommandPalette({ open, onOpenChange, onRunNow }) {
   const router = useRouter();
@@ -21,55 +29,34 @@ export function CommandPalette({ open, onOpenChange, onRunNow }) {
 
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
-      <CommandInput 
-        placeholder="Type a command or search…" 
-        className="text-[15px] focus:ring-0"
-      />
-      <CommandList className="p-2">
+      <CommandInput placeholder="Type a command or search…" />
+      <CommandList className="p-1.5">
         <CommandEmpty className="py-10 text-center text-sm text-muted-foreground">
-          No ripples found in the tide.
+          No results found.
         </CommandEmpty>
-        <CommandGroup heading="Navigate" className="px-1 text-xs font-medium text-cyan-600/70 dark:text-cyan-400/70">
-          <CommandItem 
-            onSelect={() => go("/inbox")}
-            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-300 aria-selected:bg-gradient-to-r aria-selected:from-cyan-50 aria-selected:to-blue-50 dark:aria-selected:from-cyan-950/30 dark:aria-selected:to-blue-900/30 aria-selected:text-cyan-700 dark:aria-selected:text-cyan-300"
-          >
-            <Inbox size={16} className="text-cyan-500 transition-transform group-hover:scale-110" />
-            <span className="font-medium">Go to Inbox</span>
-          </CommandItem>
-          <CommandItem 
-            onSelect={() => go("/agents")}
-            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-300 aria-selected:bg-gradient-to-r aria-selected:from-cyan-50 aria-selected:to-blue-50 dark:aria-selected:from-cyan-950/30 dark:aria-selected:to-blue-900/30 aria-selected:text-cyan-700 dark:aria-selected:text-cyan-300"
-          >
-            <Bot size={16} className="text-cyan-500 transition-transform group-hover:scale-110" />
-            <span className="font-medium">Go to Agents</span>
-          </CommandItem>
-          <CommandItem 
-            onSelect={() => go("/activity")}
-            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-300 aria-selected:bg-gradient-to-r aria-selected:from-cyan-50 aria-selected:to-blue-50 dark:aria-selected:from-cyan-950/30 dark:aria-selected:to-blue-900/30 aria-selected:text-cyan-700 dark:aria-selected:text-cyan-300"
-          >
-            <Activity size={16} className="text-cyan-500 transition-transform group-hover:scale-110" />
-            <span className="font-medium">Go to Activity</span>
-          </CommandItem>
-          <CommandItem 
-            onSelect={() => go("/settings")}
-            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-300 aria-selected:bg-gradient-to-r aria-selected:from-cyan-50 aria-selected:to-blue-50 dark:aria-selected:from-cyan-950/30 dark:aria-selected:to-blue-900/30 aria-selected:text-cyan-700 dark:aria-selected:text-cyan-300"
-          >
-            <Settings size={16} className="text-cyan-500 transition-transform group-hover:scale-110" />
-            <span className="font-medium">Go to Settings</span>
-          </CommandItem>
+        <CommandGroup heading="Navigate">
+          {NAV_ITEMS.map(({ href, icon: Icon, label }) => (
+            <CommandItem
+              key={href}
+              onSelect={() => go(href)}
+              className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm aria-selected:bg-accent aria-selected:text-accent-foreground"
+            >
+              <Icon size={16} className="text-muted-foreground" />
+              {label}
+            </CommandItem>
+          ))}
         </CommandGroup>
-        <div className="my-1 h-px w-full bg-gradient-to-r from-transparent via-cyan-200 to-transparent dark:via-cyan-800" />
-        <CommandGroup heading="Actions" className="px-1 text-xs font-medium text-cyan-600/70 dark:text-cyan-400/70">
+        <CommandSeparator />
+        <CommandGroup heading="Actions">
           <CommandItem
             onSelect={() => {
               onRunNow?.();
               onOpenChange(false);
             }}
-            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-300 aria-selected:bg-gradient-to-r aria-selected:from-cyan-500 aria-selected:to-blue-500 aria-selected:text-white"
+            className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm aria-selected:bg-accent aria-selected:text-accent-foreground"
           >
-            <RefreshCw size={16} className="transition-transform group-hover:rotate-180" />
-            <span className="font-semibold tracking-wide">Run agents now</span>
+            <RefreshCw size={16} className="text-muted-foreground" />
+            Run agents now
           </CommandItem>
         </CommandGroup>
       </CommandList>

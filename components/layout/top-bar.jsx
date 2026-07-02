@@ -1,51 +1,37 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Play, Loader2 } from "lucide-react";
+import { Play, Loader2, Command } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
-const TITLES = {
-  "/inbox": "Inbox",
-  "/agents": "Agents",
-  "/activity": "Activity",
-  "/settings": "Settings",
+const PAGES = {
+  "/inbox": { title: "Inbox", subtitle: "Your Gmail, triaged" },
+  "/agents": { title: "Agents", subtitle: "Rules that run on autopilot" },
+  "/activity": { title: "Activity", subtitle: "Everything your agents did" },
+  "/settings": { title: "Settings", subtitle: "Provider, cadence, account" },
 };
 
 export function TopBar({ running, onRunNow }) {
   const pathname = usePathname();
-  const title = Object.entries(TITLES).find(([prefix]) => pathname?.startsWith(prefix))?.[1] || "Tide";
+  const page = Object.entries(PAGES).find(([prefix]) => pathname?.startsWith(prefix))?.[1] || { title: "Tide" };
 
   return (
-    <header className="flex h-20 shrink-0 items-center justify-between border-b border-cyan-100/30 bg-background/60 px-8 backdrop-blur-xl dark:border-cyan-900/30">
-      <h1 className="bg-gradient-to-r from-slate-800 to-slate-500 bg-clip-text text-xl font-extrabold tracking-tight text-transparent dark:from-slate-100 dark:to-slate-400">
-        {title}
-      </h1>
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-background px-6">
+      <div className="flex items-baseline gap-3 min-w-0">
+        <h1 className="text-[15px] font-semibold tracking-tight text-foreground">{page.title}</h1>
+        {page.subtitle && (
+          <span className="hidden truncate text-xs text-muted-foreground sm:inline">{page.subtitle}</span>
+        )}
+      </div>
 
-      <div className="flex items-center gap-4">
-        <Button 
-          onClick={onRunNow} 
-          disabled={running}
-          className={cn(
-            "group relative h-10 overflow-hidden rounded-full pl-5 pr-6 transition-all duration-300 active:scale-95",
-            running 
-              ? "bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500" 
-              : "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-[0_0_20px_-4px_rgba(6,182,212,0.6)] hover:from-cyan-400 hover:to-blue-400 hover:shadow-[0_0_25px_-2px_rgba(59,130,246,0.7)]"
-          )}
-        >
-          <span className="relative z-10 flex items-center gap-2.5 text-sm font-bold tracking-wide">
-            {running ? (
-              <Loader2 size={16} className="animate-spin opacity-70" />
-            ) : (
-              <Play size={14} fill="currentColor" className="transition-transform duration-300 ease-out group-hover:scale-125" />
-            )}
-            {running ? "Riding the wave…" : "Run Now"}
-          </span>
-          
-          {/* Shine effect inside the bright wave button */}
-          {!running && (
-            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
-          )}
+      <div className="flex items-center gap-3">
+        <div className="hidden items-center gap-1.5 rounded-md border border-border bg-muted px-2 py-1 text-[11px] text-muted-foreground md:flex">
+          <Command size={11} />
+          <span>K to search</span>
+        </div>
+        <Button onClick={onRunNow} disabled={running} size="sm" className="gap-2">
+          {running ? <Loader2 size={14} className="animate-spin" /> : <Play size={13} fill="currentColor" />}
+          {running ? "Running…" : "Run now"}
         </Button>
       </div>
     </header>

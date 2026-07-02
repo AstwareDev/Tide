@@ -3,9 +3,9 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 
 const ACTION_COLORS = {
-  label: "text-blue-400",
-  archive: "text-amber-400",
-  delete: "text-red-400",
+  label: "text-primary",
+  archive: "text-amber-600",
+  delete: "text-destructive",
   skip: "text-muted-foreground",
 };
 
@@ -37,7 +37,7 @@ export function AgentCard({ agent, onToggle, onEdit, onDelete }) {
           <Pencil size={13} />
         </Button>
         {!agent.isDefault && (
-          <Button variant="ghost" size="icon" onClick={onDelete} className="hover:text-red-400">
+          <Button variant="ghost" size="icon" onClick={onDelete} className="hover:text-destructive">
             <Trash2 size={13} />
           </Button>
         )}

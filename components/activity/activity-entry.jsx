@@ -2,11 +2,11 @@ import { Tag, Trash2, Archive, SkipForward, AlertCircle, Undo2 } from "lucide-re
 import { Button } from "@/components/ui/button";
 
 const ACTION_CONFIG = {
-  label: { icon: Tag, color: "text-blue-400", bg: "bg-blue-500/10", label: "Labeled" },
-  delete: { icon: Trash2, color: "text-red-400", bg: "bg-red-500/10", label: "Deleted" },
-  archive: { icon: Archive, color: "text-amber-400", bg: "bg-amber-500/10", label: "Archived" },
+  label: { icon: Tag, color: "text-primary", bg: "bg-primary/10", label: "Labeled" },
+  delete: { icon: Trash2, color: "text-red-600", bg: "bg-red-500/10", label: "Deleted" },
+  archive: { icon: Archive, color: "text-amber-600", bg: "bg-amber-500/10", label: "Archived" },
   skip: { icon: SkipForward, color: "text-muted-foreground", bg: "bg-gray-500/10", label: "Skipped" },
-  error: { icon: AlertCircle, color: "text-orange-400", bg: "bg-orange-500/10", label: "Error" },
+  error: { icon: AlertCircle, color: "text-orange-600", bg: "bg-orange-500/10", label: "Error" },
 };
 
 function formatTime(ms) {

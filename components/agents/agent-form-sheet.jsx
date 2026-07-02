@@ -12,9 +12,9 @@ import { AgentTemplatePicker } from "@/components/agents/agent-template-picker";
 import { cn } from "@/lib/utils";
 
 const ACTIONS = [
-  { value: "label", label: "Label", color: "text-blue-400 border-blue-500/30" },
-  { value: "archive", label: "Archive", color: "text-amber-400 border-amber-500/30" },
-  { value: "delete", label: "Delete", color: "text-red-400 border-red-500/30" },
+  { value: "label", label: "Label", color: "text-primary border-primary/30" },
+  { value: "archive", label: "Archive", color: "text-amber-600 border-amber-500/30" },
+  { value: "delete", label: "Delete", color: "text-red-600 border-red-500/30" },
 ];
 
 export function AgentFormSheet({ open, onOpenChange, initial, onSave }) {

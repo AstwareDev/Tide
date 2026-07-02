@@ -60,7 +60,8 @@ export default function AgentsPage() {
   };
 
   return (
-    <div className="h-full overflow-y-auto p-6">
+    <div className="h-full overflow-y-auto">
+      <div className="mx-auto max-w-3xl p-6">
       <div className="flex items-center justify-between mb-6">
         <p className="text-muted-foreground text-sm mt-0.5">
           {agents.filter((a) => a.enabled).length} active · {agents.length} total
@@ -102,6 +103,7 @@ export default function AgentsPage() {
         initial={sheet?.agent}
         onSave={(data) => handleUpdate(sheet.agent.id, data)}
       />
+      </div>
     </div>
   );
 }

@@ -30,7 +30,7 @@ function FormItem({ className, ...props }) {
 
 function FormLabel({ className, ...props }) {
   const { error } = useFormField();
-  return <Label className={cn(error && "text-red-400", className)} {...props} />;
+  return <Label className={cn(error && "text-destructive", className)} {...props} />;
 }
 
 function FormControl({ ...props }) {
@@ -42,7 +42,7 @@ function FormMessage({ className, children, ...props }) {
   const body = error ? String(error?.message ?? "") : children;
   if (!body) return null;
   return (
-    <p className={cn("text-xs text-red-400", className)} {...props}>
+    <p className={cn("text-xs text-destructive", className)} {...props}>
       {body}
     </p>
   );

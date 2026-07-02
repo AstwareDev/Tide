@@ -62,7 +62,7 @@ export function MessageDetail({ threadId }) {
 
   if (error) {
     return (
-      <div className="flex-1 flex items-center justify-center text-sm text-red-400">{error}</div>
+      <div className="flex-1 flex items-center justify-center text-sm text-destructive">{error}</div>
     );
   }
 

@@ -225,7 +225,7 @@ export function MessageList() {
   return (
     <div className="flex flex-col h-full border-r border-border">
       <div className="p-3 border-b border-border">
-        <div className="flex items-center gap-2 bg-accent rounded-lg px-3 py-2">
+        <div className="flex items-center gap-2 rounded-lg border border-transparent bg-accent px-3 py-2 transition-colors focus-within:border-ring/40 focus-within:bg-background">
           <Search size={14} className="text-muted-foreground shrink-0" />
           <input
             id="inbox-search"
@@ -251,7 +251,7 @@ export function MessageList() {
             ))}
           </div>
         ) : error ? (
-          <div className="p-4 text-sm text-red-400">{error}</div>
+          <div className="p-4 text-sm text-destructive">{error}</div>
         ) : filtered.length === 0 ? (
           <EmptyInbox hasQuery={!!query} />
         ) : (

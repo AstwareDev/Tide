@@ -46,7 +46,7 @@ export function AgentPreviewPanel({ prompt, action, labelName }) {
           {results.map((r) => (
             <div key={r.messageId} className="flex items-start gap-2 text-xs">
               {r.matches ? (
-                <Check size={13} className="text-emerald-400 shrink-0 mt-0.5" />
+                <Check size={13} className="text-emerald-600 shrink-0 mt-0.5" />
               ) : (
                 <Minus size={13} className="text-muted-foreground shrink-0 mt-0.5" />
               )}

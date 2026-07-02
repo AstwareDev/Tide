@@ -1,9 +1,10 @@
 "use client";
 
-import { Archive, Trash2, Tag } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { forwardRef } from "react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { gravatarUrl, avatarColor } from "@/lib/gravatar";
 import { cn } from "@/lib/utils";
 
 const ACTION_BADGE_VARIANT = {
@@ -28,14 +29,21 @@ function initials(from) {
   return (parts[0][0] + (parts[1]?.[0] || "")).toUpperCase();
 }
 
-export function MessageRow({ thread, active, checked, onSelect, onToggleCheck, onArchive, onDelete, onLabel }) {
+export const MessageRow = forwardRef(function MessageRow(
+  { thread, active, checked, onSelect, onToggleCheck },
+  ref
+) {
+  const senderName = thread.from?.split("<")[0].trim() || thread.from || "Unknown";
+
   return (
     <button
+      ref={ref}
       onClick={onSelect}
       data-active={active || undefined}
       className={cn(
-        "w-full text-left px-4 py-3.5 border-b border-border hover:bg-accent transition-colors group relative",
-        active && "bg-secondary border-l-2 border-l-primary"
+        "w-full text-left px-3.5 py-3 rounded-xl border border-transparent bg-card transition-all duration-150 group relative",
+        "hover:border-border hover:shadow-sm hover:-translate-y-px",
+        active && "border-primary/30 bg-secondary shadow-sm"
       )}
     >
       <div className="flex items-start gap-3">
@@ -47,62 +55,26 @@ export function MessageRow({ thread, active, checked, onSelect, onToggleCheck, o
             onToggleCheck?.();
           }}
           onClick={(e) => e.stopPropagation()}
-          className="mt-1.5 shrink-0"
+          className="mt-2 shrink-0 accent-primary"
         />
-        <Avatar className="mt-0.5">
-          <AvatarFallback>{initials(thread.from)}</AvatarFallback>
+        <Avatar className="mt-0.5 h-9 w-9 ring-1 ring-border">
+          <AvatarImage src={gravatarUrl(thread.from) || undefined} alt="" />
+          <AvatarFallback style={{ backgroundColor: avatarColor(senderName), color: "#fff" }}>
+            {initials(thread.from)}
+          </AvatarFallback>
         </Avatar>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2 mb-0.5">
-            <span className={cn("text-[13px] truncate", thread.unread ? "font-semibold text-foreground" : "text-muted-foreground")}>
-              {thread.from?.split("<")[0].trim() || thread.from}
+          <div className="flex items-center justify-between gap-2 mb-0.5">
+            <span
+              className={cn(
+                "text-[13px] truncate",
+                thread.unread ? "font-semibold text-foreground" : "text-muted-foreground"
+              )}
+            >
+              {senderName}
             </span>
-            <span className="text-[11px] text-muted-foreground shrink-0 group-hover:hidden">{formatDate(thread.date)}</span>
-            <div className="hidden group-hover:flex items-center gap-1 shrink-0">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onArchive?.();
-                    }}
-                    className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-amber-500 cursor-pointer"
-                  >
-                    <Archive size={13} />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>Archive (e)</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onLabel?.();
-                    }}
-                    className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-primary cursor-pointer"
-                  >
-                    <Tag size={13} />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>Label (l)</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDelete?.();
-                    }}
-                    className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-red-500 cursor-pointer"
-                  >
-                    <Trash2 size={13} />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>Delete (#)</TooltipContent>
-              </Tooltip>
-            </div>
+            <span className="text-[11px] text-muted-foreground shrink-0">{formatDate(thread.date)}</span>
           </div>
 
           <div className="text-[13px] text-muted-foreground truncate mb-1.5">
@@ -134,4 +106,4 @@ export function MessageRow({ thread, active, checked, onSelect, onToggleCheck, o
       </div>
     </button>
   );
-}
+});

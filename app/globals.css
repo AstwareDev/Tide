@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @theme inline {
   --color-background: var(--background);
@@ -109,4 +110,22 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #aebfd2;
+}
+
+.resize-handle {
+  position: relative;
+  width: 1px;
+  background: var(--border);
+  transition: background-color 0.15s ease;
+}
+
+.resize-handle::after {
+  content: "";
+  position: absolute;
+  inset: 0 -3px;
+}
+
+.resize-handle:hover,
+.resize-handle[data-resize-handle-active] {
+  background: var(--primary);
 }

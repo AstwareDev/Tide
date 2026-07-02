@@ -12,50 +12,39 @@ const TITLES = {
   "/settings": "Settings",
 };
 
-export function TopBar({ email, running, onRunNow }) {
+export function TopBar({ running, onRunNow }) {
   const pathname = usePathname();
   const title = Object.entries(TITLES).find(([prefix]) => pathname?.startsWith(prefix))?.[1] || "Tide";
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between border-b border-border/40 bg-background/70 px-8 backdrop-blur-xl transition-all">
-      <div className="flex items-center gap-4">
-        <h1 className="text-[17px] font-semibold tracking-tight text-foreground">
-          {title}
-        </h1>
-      </div>
+    <header className="flex h-20 shrink-0 items-center justify-between border-b border-cyan-100/30 bg-background/60 px-8 backdrop-blur-xl dark:border-cyan-900/30">
+      <h1 className="bg-gradient-to-r from-slate-800 to-slate-500 bg-clip-text text-xl font-extrabold tracking-tight text-transparent dark:from-slate-100 dark:to-slate-400">
+        {title}
+      </h1>
 
       <div className="flex items-center gap-4">
-        <div className="group flex cursor-default items-center gap-2.5 rounded-full border border-border/50 bg-secondary/40 px-3.5 py-1.5 backdrop-blur-md transition-all duration-300 hover:bg-secondary/60 hover:shadow-sm">
-          <div className="relative flex h-2 w-2 items-center justify-center">
-            <div className="absolute h-full w-full animate-ping rounded-full bg-emerald-400 opacity-40" />
-            <div className="relative h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-          </div>
-          <span className="max-w-[180px] truncate text-xs font-medium text-muted-foreground transition-colors group-hover:text-foreground">
-            {email}
-          </span>
-        </div>
-
         <Button 
-          size="sm" 
           onClick={onRunNow} 
           disabled={running}
           className={cn(
-            "group relative h-8 overflow-hidden rounded-full pl-3 pr-4 transition-all duration-300 active:scale-95",
+            "group relative h-10 overflow-hidden rounded-full pl-5 pr-6 transition-all duration-300 active:scale-95",
             running 
-              ? "bg-secondary text-muted-foreground" 
-              : "bg-foreground text-background shadow-md hover:shadow-lg hover:shadow-foreground/10"
+              ? "bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500" 
+              : "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-[0_0_20px_-4px_rgba(6,182,212,0.6)] hover:from-cyan-400 hover:to-blue-400 hover:shadow-[0_0_25px_-2px_rgba(59,130,246,0.7)]"
           )}
         >
-          <span className="relative z-10 flex items-center gap-2 text-xs font-semibold tracking-wide">
+          <span className="relative z-10 flex items-center gap-2.5 text-sm font-bold tracking-wide">
             {running ? (
-              <Loader2 size={13} className="animate-spin opacity-70" />
+              <Loader2 size={16} className="animate-spin opacity-70" />
             ) : (
-              <Play size={11} fill="currentColor" className="transition-transform duration-300 ease-out group-hover:scale-110" />
+              <Play size={14} fill="currentColor" className="transition-transform duration-300 ease-out group-hover:scale-125" />
             )}
-            {running ? "Running…" : "Run Now"}
+            {running ? "Riding the wave…" : "Run Now"}
           </span>
+          
+          {/* Shine effect inside the bright wave button */}
           {!running && (
-            <div className="absolute inset-0 -z-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
           )}
         </Button>
       </div>

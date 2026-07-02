@@ -23,63 +23,53 @@ export function CommandPalette({ open, onOpenChange, onRunNow }) {
     <CommandDialog open={open} onOpenChange={onOpenChange}>
       <CommandInput 
         placeholder="Type a command or search…" 
-        className="text-[15px] placeholder:text-muted-foreground/60 focus:ring-0"
+        className="text-[15px] focus:ring-0"
       />
       <CommandList className="p-2">
-        <CommandEmpty className="py-12 text-center text-sm text-muted-foreground">
-          No results found.
+        <CommandEmpty className="py-10 text-center text-sm text-muted-foreground">
+          No ripples found in the tide.
         </CommandEmpty>
-        <CommandGroup heading="Navigate" className="px-1 text-xs font-medium text-muted-foreground/70">
+        <CommandGroup heading="Navigate" className="px-1 text-xs font-medium text-cyan-600/70 dark:text-cyan-400/70">
           <CommandItem 
             onSelect={() => go("/inbox")}
-            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-200 ease-out aria-selected:bg-accent/50 aria-selected:text-accent-foreground"
+            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-300 aria-selected:bg-gradient-to-r aria-selected:from-cyan-50 aria-selected:to-blue-50 dark:aria-selected:from-cyan-950/30 dark:aria-selected:to-blue-900/30 aria-selected:text-cyan-700 dark:aria-selected:text-cyan-300"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-background shadow-sm ring-1 ring-border/50 transition-transform group-hover:scale-105 group-active:scale-95">
-              <Inbox size={14} className="text-foreground/70" />
-            </div>
-            <span className="font-medium tracking-tight">Go to Inbox</span>
+            <Inbox size={16} className="text-cyan-500 transition-transform group-hover:scale-110" />
+            <span className="font-medium">Go to Inbox</span>
           </CommandItem>
           <CommandItem 
             onSelect={() => go("/agents")}
-            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-200 ease-out aria-selected:bg-accent/50 aria-selected:text-accent-foreground"
+            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-300 aria-selected:bg-gradient-to-r aria-selected:from-cyan-50 aria-selected:to-blue-50 dark:aria-selected:from-cyan-950/30 dark:aria-selected:to-blue-900/30 aria-selected:text-cyan-700 dark:aria-selected:text-cyan-300"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-background shadow-sm ring-1 ring-border/50 transition-transform group-hover:scale-105 group-active:scale-95">
-              <Bot size={14} className="text-foreground/70" />
-            </div>
-            <span className="font-medium tracking-tight">Go to Agents</span>
+            <Bot size={16} className="text-cyan-500 transition-transform group-hover:scale-110" />
+            <span className="font-medium">Go to Agents</span>
           </CommandItem>
           <CommandItem 
             onSelect={() => go("/activity")}
-            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-200 ease-out aria-selected:bg-accent/50 aria-selected:text-accent-foreground"
+            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-300 aria-selected:bg-gradient-to-r aria-selected:from-cyan-50 aria-selected:to-blue-50 dark:aria-selected:from-cyan-950/30 dark:aria-selected:to-blue-900/30 aria-selected:text-cyan-700 dark:aria-selected:text-cyan-300"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-background shadow-sm ring-1 ring-border/50 transition-transform group-hover:scale-105 group-active:scale-95">
-              <Activity size={14} className="text-foreground/70" />
-            </div>
-            <span className="font-medium tracking-tight">Go to Activity</span>
+            <Activity size={16} className="text-cyan-500 transition-transform group-hover:scale-110" />
+            <span className="font-medium">Go to Activity</span>
           </CommandItem>
           <CommandItem 
             onSelect={() => go("/settings")}
-            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-200 ease-out aria-selected:bg-accent/50 aria-selected:text-accent-foreground"
+            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-300 aria-selected:bg-gradient-to-r aria-selected:from-cyan-50 aria-selected:to-blue-50 dark:aria-selected:from-cyan-950/30 dark:aria-selected:to-blue-900/30 aria-selected:text-cyan-700 dark:aria-selected:text-cyan-300"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-background shadow-sm ring-1 ring-border/50 transition-transform group-hover:scale-105 group-active:scale-95">
-              <Settings size={14} className="text-foreground/70" />
-            </div>
-            <span className="font-medium tracking-tight">Go to Settings</span>
+            <Settings size={16} className="text-cyan-500 transition-transform group-hover:scale-110" />
+            <span className="font-medium">Go to Settings</span>
           </CommandItem>
         </CommandGroup>
-        <div className="my-1 h-px w-full bg-border/40" />
-        <CommandGroup heading="Actions" className="px-1 text-xs font-medium text-muted-foreground/70">
+        <div className="my-1 h-px w-full bg-gradient-to-r from-transparent via-cyan-200 to-transparent dark:via-cyan-800" />
+        <CommandGroup heading="Actions" className="px-1 text-xs font-medium text-cyan-600/70 dark:text-cyan-400/70">
           <CommandItem
             onSelect={() => {
               onRunNow?.();
               onOpenChange(false);
             }}
-            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-200 ease-out aria-selected:bg-primary/10 aria-selected:text-primary"
+            className="group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-300 aria-selected:bg-gradient-to-r aria-selected:from-cyan-500 aria-selected:to-blue-500 aria-selected:text-white"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary shadow-sm transition-transform group-hover:scale-105 group-active:scale-95">
-              <RefreshCw size={14} />
-            </div>
-            <span className="font-medium tracking-tight text-primary">Run agents now</span>
+            <RefreshCw size={16} className="transition-transform group-hover:rotate-180" />
+            <span className="font-semibold tracking-wide">Run agents now</span>
           </CommandItem>
         </CommandGroup>
       </CommandList>

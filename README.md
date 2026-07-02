@@ -1,6 +1,16 @@
-<img src="public/logo-192.png" alt="Tide logo" width="96" />\# Tide
+<p align="center">
+  <img src="public/logo-192.png" alt="Tide logo" width="96" />
+</p>
 
-![Website — Visit Tide](.github/badges/website.svg)![Source — AstwareDev/Tide](.github/badges/source.svg)![License — MIT](.github/badges/license.svg)&gt; A Gmail inbox that's more comfortable and addictive than Gmail itself — with passive AI agents that quietly label, archive, and delete the noise.
+<h1 align="center">Tide</h1>
+
+<p align="center">
+  <img src=".github/badges/website.svg" alt="Website — Visit Tide" />
+  <img src=".github/badges/source.svg" alt="Source — AstwareDev/Tide" />
+  <img src=".github/badges/license.svg" alt="License — MIT" />
+</p>
+
+> A Gmail inbox that's more comfortable and addictive than Gmail itself — with passive AI agents that quietly label, archive, and delete the noise.
 
 ## What is Tide?
 
@@ -13,6 +23,20 @@ You define the rules. The agents do the work. The inbox itself is designed to be
 - **Education Labeler** — labels emails from courses, universities, or learning platforms as `Education`
 - **Ads Deleter** — trashes promotional and marketing emails
 - **Stale Security Notification Deleter** — removes one-time alerts like "new sign-in detected" or "password changed successfully"
+
+### Contents
+
+- [Prerequisites](#prerequisites)
+- [Google Cloud Setup](#google-cloud-setup)
+- [Environment Variables](#environment-variables)
+- [Development](#development)
+- [Deploying](#deploying)
+- [Keyboard Shortcuts](#keyboard-shortcuts)
+- [Agent Configuration](#agent-configuration)
+- [Architecture](#architecture)
+- [Privacy](#privacy)
+- [Limitations](#limitations)
+- [License](#license)
 
 ---
 
@@ -122,7 +146,7 @@ Agents default to no-match ("skip") when uncertain — a conservative prompt is 
 │  app/api/cron       — Vercel Cron target (agent cycle)      │
 │                                                            │
 │  lib/gmail/*  — Gmail API (OAuth2Client, threads, actions)│
-│  lib/ai/*     — Vercel AI SDK classification (Claude)     │
+│  lib/ai/*     — Vercel AI SDK classification (Gemini)     │
 │  lib/agents/* — agent defaults + classification runner    │
 │                                                            │
 │  Vercel KV (Redis) — tokens, agents, activity, settings   │
@@ -136,7 +160,7 @@ Agents default to no-match ("skip") when uncertain — a conservative prompt is 
 
 **OAuth2 flow:** clicking "Connect Gmail" redirects to Google's consent screen; Google redirects back to `/api/auth/callback`, which exchanges the code for tokens, stores them in Vercel KV, and sets a signed session cookie that gates the rest of the app (this is a single-user deployment — the cookie is a lock on the front door, not a multi-tenant identity system).
 
-**Agent cycle:** every 5 minutes (via Vercel Cron), `/api/cron` fetches up to 100 unlabeled threads, classifies each with Claude via the Vercel AI SDK, and applies the first matching agent's action. Processed message IDs are tracked in KV to avoid re-classifying. The same cycle can be triggered manually from the UI ("Run Now").
+**Agent cycle:** every 5 minutes (via Vercel Cron), `/api/cron` fetches up to 100 unlabeled threads, classifies each with Gemini via the Vercel AI SDK, and applies the first matching agent's action. Processed message IDs are tracked in KV to avoid re-classifying. The same cycle can be triggered manually from the UI ("Run Now").
 
 ---
 

@@ -4,7 +4,7 @@ import { forwardRef, useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { gravatarUrl, faviconUrl, avatarColor } from "@/lib/gravatar";
+import { gravatarUrl, avatarColor } from "@/lib/gravatar";
 import { getLabelColor } from "@/lib/label-colors";
 import { cn } from "@/lib/utils";
 
@@ -30,11 +30,15 @@ function initials(from) {
   return (parts[0][0] + (parts[1]?.[0] || "")).toUpperCase();
 }
 
-// Cascades through candidate image sources (People API contact photo →
-// domain favicon → Gravatar) advancing to the next one whenever a source
-// fails to load, only falling back to initials once all are exhausted.
+// Cascades through candidate image sources, advancing whenever one fails to
+// load, and falling back to initials once all are exhausted. `avatarUrl`
+// (resolved server-side) is the People API contact photo or, failing that, the
+// sender's HTTP-verified domain favicon; Gravatar is the final image attempt.
+// The domain favicon is deliberately NOT included here — Google serves a
+// generic globe with a 404 status that browsers render anyway, so it can only
+// be trusted after the server checks its status (see lib/google/people.js).
 function SenderAvatar({ avatarUrl, from, pending, senderName }) {
-  const candidates = pending ? [] : [avatarUrl, faviconUrl(from), gravatarUrl(from)].filter(Boolean);
+  const candidates = pending ? [] : [avatarUrl, gravatarUrl(from)].filter(Boolean);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {

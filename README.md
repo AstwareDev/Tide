@@ -5,13 +5,13 @@
 <h1 align="center">Tide</h1>
 
 <p align="center">
-  <a href="https://tidemail.vercel.app/">
+  <a href="https://tidemail.vercel.app/" target="_blank" rel="noopener noreferrer">
     <img src=".github/badges/website.svg" alt="Website — Visit Tide" width="200" />
   </a>
-  <a href="https://github.com/AstwareDev/Tide/archive/refs/heads/main.zip">
+  <a href="https://github.com/AstwareDev/Tide/archive/refs/heads/main.zip" target="_blank" rel="noopener noreferrer">
     <img src=".github/badges/source.svg" alt="Source on GitHub" width="200" />
   </a>
-  <a href="https://github.com/AstwareDev/Tide/LICENSE">
+  <a href="https://github.com/AstwareDev/Tide/LICENSE" target="_blank" rel="noopener noreferrer">
     <img src=".github/badges/license.svg" alt="License — MIT" width="200" />
   </a>
 </p>

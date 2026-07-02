@@ -11,7 +11,7 @@
   <a href="https://github.com/AstwareDev/Tide/archive/refs/heads/main.zip" target="_blank" rel="noopener noreferrer">
     <img src=".github/badges/source.svg" alt="Source on GitHub" width="200" />
   </a>
-  <a href="https://github.com/AstwareDev/Tide/LICENSE" target="_blank" rel="noopener noreferrer">
+  <a href="https://github.com/AstwareDev/Tide/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
     <img src=".github/badges/license.svg" alt="License — MIT" width="200" />
   </a>
 </p>

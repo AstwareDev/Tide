@@ -6,6 +6,9 @@ export const metadata = {
   title: "Tide",
   description: "AI-powered Gmail inbox that's faster and calmer than Gmail itself.",
   manifest: "/site.webmanifest",
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export const viewport = {

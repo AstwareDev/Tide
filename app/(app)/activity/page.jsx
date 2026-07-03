@@ -8,18 +8,21 @@ import { ActivityEntry } from "@/components/activity/activity-entry";
 import { ActivityUndoBar } from "@/components/activity/activity-undo-bar";
 import { ActivityFilterTabs } from "@/components/activity/activity-filter-tabs";
 import { api } from "@/lib/api-client";
-
-function formatDate(ms) {
-  const d = new Date(ms);
-  const today = new Date();
-  if (d.toDateString() === today.toDateString()) return "Today";
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-  if (d.toDateString() === yesterday.toDateString()) return "Yesterday";
-  return d.toLocaleDateString([], { month: "short", day: "numeric" });
-}
+import { useLocale } from "@/lib/i18n/locale-context";
 
 export default function ActivityPage() {
+  const { t, locale } = useLocale();
+
+  function formatDate(ms) {
+    const d = new Date(ms);
+    const today = new Date();
+    if (d.toDateString() === today.toDateString()) return t("activity.today");
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    if (d.toDateString() === yesterday.toDateString()) return t("activity.yesterday");
+    return d.toLocaleDateString(locale, { month: "short", day: "numeric" });
+  }
+
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
@@ -79,8 +82,8 @@ export default function ActivityPage() {
     return (
       <div className="h-full flex flex-col items-center justify-center text-muted-foreground">
         <Activity size={36} strokeWidth={1.25} className="mb-3" />
-        <p className="text-sm font-medium">No activity yet</p>
-        <p className="text-xs mt-1">Run your agents to see what they do here.</p>
+        <p className="text-sm font-medium">{t("activity.emptyTitle")}</p>
+        <p className="text-xs mt-1">{t("activity.emptySubtitle")}</p>
       </div>
     );
   }

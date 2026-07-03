@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { LocaleProvider } from "@/lib/i18n/locale-context";
 
 export const metadata = {
   title: "Tide",
@@ -19,10 +20,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <TooltipProvider>
-          {children}
-          <Toaster theme="light" position="bottom-right" richColors />
-        </TooltipProvider>
+        <LocaleProvider>
+          <TooltipProvider>
+            {children}
+            <Toaster theme="light" position="bottom-right" richColors />
+          </TooltipProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

@@ -7,23 +7,25 @@ import { Inbox, Bot, Activity, Settings, LogOut } from "lucide-react";
 import { SenderAvatar } from "@/components/inbox/sender-avatar";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api-client";
-
-const NAV = [
-  { href: "/inbox", icon: Inbox, label: "Inbox" },
-  { href: "/agents", icon: Bot, label: "Agents" },
-  { href: "/activity", icon: Activity, label: "Activity" },
-  { href: "/settings", icon: Settings, label: "Settings" },
-];
+import { useLocale } from "@/lib/i18n/locale-context";
 
 export function NavRail({ email }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { t } = useLocale();
   const [hovered, setHovered] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarPending, setAvatarPending] = useState(true);
 
   const isInbox = pathname?.startsWith("/inbox");
   const collapsed = isInbox && !hovered;
+
+  const NAV = [
+    { href: "/inbox", icon: Inbox, label: t("nav.inbox") },
+    { href: "/agents", icon: Bot, label: t("nav.agents") },
+    { href: "/activity", icon: Activity, label: t("nav.activity") },
+    { href: "/settings", icon: Settings, label: t("nav.settings") },
+  ];
 
   useEffect(() => {
     if (!email) return;
@@ -103,12 +105,12 @@ export function NavRail({ email }) {
           {!collapsed && (
             <>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-medium text-foreground">{email || "Connecting…"}</p>
-                <p className="text-[11px] text-muted-foreground">Gmail connected</p>
+                <p className="truncate text-xs font-medium text-foreground">{email || t("nav.connecting")}</p>
+                <p className="text-[11px] text-muted-foreground">{t("nav.gmailConnected")}</p>
               </div>
               <button
                 onClick={handleLogout}
-                title="Log out"
+                title={t("nav.logout")}
                 className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-destructive"
               >
                 <LogOut size={14} />

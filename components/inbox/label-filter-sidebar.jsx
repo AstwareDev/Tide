@@ -5,8 +5,10 @@ import { ChevronsLeft, ChevronsRight, Mail, Tag, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getLabelColor } from "@/lib/label-colors";
 import { useInboxFilter } from "@/components/inbox/inbox-filter-context";
+import { useLocale } from "@/lib/i18n/locale-context";
 
 export function LabelFilterSidebar() {
+  const { t } = useLocale();
   const [collapsed, setCollapsed] = useState(false);
   const { userLabels, threads, selectedLabelIds, toggleLabel, showUnreadOnly, setShowUnreadOnly, clearFilters } =
     useInboxFilter();
@@ -29,7 +31,7 @@ export function LabelFilterSidebar() {
         <button
           onClick={() => setCollapsed(false)}
           className="mb-2 flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          title="Expand labels"
+          title={t("inbox.expandLabels")}
         >
           <ChevronsRight size={15} />
         </button>
@@ -39,7 +41,7 @@ export function LabelFilterSidebar() {
             "flex h-7 w-7 items-center justify-center rounded-md transition-colors",
             showUnreadOnly ? "bg-primary/15 text-primary" : "text-muted-foreground hover:bg-accent hover:text-foreground"
           )}
-          title="Unread"
+          title={t("inbox.unread")}
         >
           <Mail size={14} />
         </button>
@@ -68,11 +70,11 @@ export function LabelFilterSidebar() {
   return (
     <div className="flex w-[196px] shrink-0 flex-col border-r border-border bg-card/40">
       <div className="flex items-center justify-between px-3 pt-3 pb-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Filters</span>
+        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{t("inbox.filters")}</span>
         <button
           onClick={() => setCollapsed(true)}
           className="flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          title="Collapse"
+          title={t("inbox.collapse")}
         >
           <ChevronsLeft size={14} />
         </button>
@@ -87,17 +89,17 @@ export function LabelFilterSidebar() {
           )}
         >
           <Mail size={14} className="shrink-0" />
-          <span className="flex-1 text-left">Unread</span>
+          <span className="flex-1 text-left">{t("inbox.unread")}</span>
           {unreadCount > 0 && <span className="text-[11px] text-muted-foreground">{unreadCount}</span>}
         </button>
 
         <div className="mt-3 mb-1.5 flex items-center gap-1.5 px-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
           <Tag size={11} />
-          Labels
+          {t("inbox.labels")}
         </div>
 
         {userLabels.length === 0 ? (
-          <p className="px-2 py-1 text-[12px] text-muted-foreground">No labels yet</p>
+          <p className="px-2 py-1 text-[12px] text-muted-foreground">{t("inbox.noLabelsYet")}</p>
         ) : (
           <div className="space-y-0.5">
             {userLabels.map((label) => {
@@ -131,7 +133,7 @@ export function LabelFilterSidebar() {
           onClick={clearFilters}
           className="mx-2 mb-3 flex items-center justify-center gap-1.5 rounded-lg border border-border py-1.5 text-[12px] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         >
-          <X size={12} /> Clear filters
+          <X size={12} /> {t("inbox.clearFilters")}
         </button>
       )}
     </div>

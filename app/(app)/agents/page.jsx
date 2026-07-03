@@ -8,8 +8,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AgentCard } from "@/components/agents/agent-card";
 import { AgentFormSheet } from "@/components/agents/agent-form-sheet";
 import { api } from "@/lib/api-client";
+import { useLocale } from "@/lib/i18n/locale-context";
 
 export default function AgentsPage() {
+  const { t } = useLocale();
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sheet, setSheet] = useState(null); // null | 'create' | { agent }
@@ -64,11 +66,11 @@ export default function AgentsPage() {
       <div className="mx-auto max-w-3xl p-6">
       <div className="flex items-center justify-between mb-6">
         <p className="text-muted-foreground text-sm mt-0.5">
-          {agents.filter((a) => a.enabled).length} active · {agents.length} total
+          {t("agents.activeTotal", { active: agents.filter((a) => a.enabled).length, total: agents.length })}
         </p>
         <Button onClick={() => setSheet("create")}>
           <Plus size={14} />
-          New agent
+          {t("agents.newAgent")}
         </Button>
       </div>
 

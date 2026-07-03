@@ -1,40 +1,48 @@
+"use client";
+
 import Link from "next/link";
 import { Mail, ShieldCheck, Zap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const FEATURES = [
-  { icon: Zap, text: "Passive agents run in the background, no babysitting" },
-  { icon: Mail, text: "Labels, archives, and deletes based on rules you define" },
-  { icon: ShieldCheck, text: "Your email is only sent to your AI provider for classification" },
-];
+import { LanguageSelect } from "@/components/settings/language-select";
+import { useLocale } from "@/lib/i18n/locale-context";
 
 export function LandingPage() {
+  const { t } = useLocale();
+
+  const FEATURES = [
+    { icon: Zap, text: t("landing.feature1") },
+    { icon: Mail, text: t("landing.feature2") },
+    { icon: ShieldCheck, text: t("landing.feature3") },
+  ];
+
   return (
     <div className="min-h-screen w-full bg-background">
-      <header className="flex items-center justify-between px-6 py-5 max-w-5xl mx-auto">
+      <header className="flex items-center justify-between px-6 py-5 max-w-5xl mx-auto gap-4">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center">
             <img src="/tide.png" alt="Tide" className="w-full h-full object-cover" />
           </div>
           <span className="text-foreground font-semibold tracking-tight">Tide</span>
         </div>
-        <Button asChild size="sm">
-          <Link href="/login">Get Started</Link>
-        </Button>
+        <div className="flex items-center gap-3">
+          <LanguageSelect />
+          <Button asChild size="sm">
+            <Link href="/login">{t("landing.getStarted")}</Link>
+          </Button>
+        </div>
       </header>
 
       <main className="flex flex-col items-center px-6 pt-20 pb-24 text-center max-w-3xl mx-auto">
         <h1 className="text-foreground text-4xl sm:text-5xl font-bold tracking-tight leading-tight mb-5">
-          Let AI keep your inbox clean
+          {t("landing.heroTitle")}
         </h1>
         <p className="text-muted-foreground text-base sm:text-lg leading-relaxed mb-10 max-w-xl">
-          Tide connects to your Gmail and runs AI agents that automatically label, archive, and delete the noise — so
-          your inbox stays organized without you lifting a finger.
+          {t("landing.heroSubtitle")}
         </p>
 
         <Button asChild size="lg" className="mb-16">
           <Link href="/login" className="gap-2">
-            Use the App
+            {t("landing.useApp")}
             <ArrowRight size={16} />
           </Link>
         </Button>

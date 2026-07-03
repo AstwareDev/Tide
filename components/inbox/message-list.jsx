@@ -24,10 +24,12 @@ import { api } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
 import { extractEmail } from "@/lib/gravatar";
 import { useInboxFilter } from "@/components/inbox/inbox-filter-context";
+import { useLocale } from "@/lib/i18n/locale-context";
 
 export function MessageList() {
   const router = useRouter();
   const pathname = usePathname();
+  const { t } = useLocale();
   const [threads, setThreads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -231,7 +233,7 @@ export function MessageList() {
             id="inbox-search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search emails…"
+            placeholder={t("inbox.searchPlaceholder")}
             className="bg-transparent text-sm text-foreground placeholder-muted-foreground outline-none flex-1"
           />
         </div>

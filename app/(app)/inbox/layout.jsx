@@ -1,24 +1,26 @@
 "use client";
 
-import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { usePathname, useRouter } from "next/navigation";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { InboxFilterProvider } from "@/components/inbox/inbox-filter-context";
 import { LabelFilterSidebar } from "@/components/inbox/label-filter-sidebar";
 
 export default function InboxLayout({ children, detail }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const threadOpen = /^\/inbox\/[^/]+/.test(pathname || "");
+
   return (
     <InboxFilterProvider>
       <div className="flex h-full">
         <LabelFilterSidebar />
-        <PanelGroup direction="horizontal" autoSaveId="inbox-panels" className="flex flex-1 h-full">
-          <Panel defaultSize={28} minSize={22} maxSize={50} className="h-full">
-            {children}
-          </Panel>
-          <PanelResizeHandle className="resize-handle" />
-          <Panel minSize={35} className="h-full overflow-hidden">
-            {detail}
-          </Panel>
-        </PanelGroup>
+        <div className="flex-1 h-full overflow-hidden">{children}</div>
       </div>
+      <Dialog open={threadOpen} onOpenChange={(open) => !open && router.push("/inbox")}>
+        <DialogContent showClose={false} className="max-w-3xl w-full h-[85vh] p-0 flex flex-col overflow-hidden">
+          {detail}
+        </DialogContent>
+      </Dialog>
     </InboxFilterProvider>
   );
 }

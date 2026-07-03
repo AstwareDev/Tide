@@ -69,7 +69,7 @@ export function MessageDetail({ threadId }) {
   const lastMessage = thread?.messages?.[thread.messages.length - 1];
 
   return (
-    <div key={threadId} className="flex-1 flex flex-col overflow-hidden animate-in fade-in slide-in-from-right-2 duration-200">
+    <div key={threadId} className="flex-1 flex flex-col overflow-hidden h-full">
       <div className="p-6 border-b border-border flex items-start justify-between gap-4">
         <div>
           <h2 className="text-foreground font-semibold text-base mb-1">{thread?.subject}</h2>

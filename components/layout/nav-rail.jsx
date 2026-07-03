@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { Inbox, Bot, Activity, Settings, LogOut } from "lucide-react";
@@ -17,6 +18,10 @@ const NAV = [
 export function NavRail({ email }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [hovered, setHovered] = useState(false);
+
+  const isInbox = pathname?.startsWith("/inbox");
+  const collapsed = isInbox && !hovered;
 
   const handleLogout = async () => {
     try {
@@ -27,24 +32,33 @@ export function NavRail({ email }) {
   };
 
   return (
-    <aside className="flex w-[232px] shrink-0 flex-col border-r border-border bg-muted/50">
-      <div className="px-5 pb-6 pt-5">
+    <aside
+      onMouseEnter={() => isInbox && setHovered(true)}
+      onMouseLeave={() => isInbox && setHovered(false)}
+      className={cn(
+        "flex shrink-0 flex-col border-r border-border bg-muted/50 overflow-hidden transition-[width] duration-200 ease-out",
+        collapsed ? "w-[68px]" : "w-[232px]"
+      )}
+    >
+      <div className={cn("pb-6 pt-5", collapsed ? "px-0 flex justify-center" : "px-5")}>
         <Link href="/inbox" className="flex items-center gap-2.5">
           {/* Logo is placed as-is without any clipping or rounding classes */}
-          <img src="/tide.png" alt="Tide" className="h-8 w-8" />
-          <span className="text-lg font-bold tracking-tight text-foreground">Tide</span>
+          <img src="/tide.png" alt="Tide" className="h-8 w-8 shrink-0" />
+          {!collapsed && <span className="text-lg font-bold tracking-tight text-foreground whitespace-nowrap">Tide</span>}
         </Link>
       </div>
 
-      <nav className="flex flex-1 flex-col gap-1 px-3">
+      <nav className={cn("flex flex-1 flex-col gap-1", collapsed ? "px-2" : "px-3")}>
         {NAV.map(({ href, icon: Icon, label }) => {
           const active = pathname?.startsWith(href);
           return (
             <Link
               key={href}
               href={href}
+              title={collapsed ? label : undefined}
               className={cn(
-                "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+                "group flex items-center gap-3 rounded-lg py-2 text-sm transition-colors whitespace-nowrap",
+                collapsed ? "justify-center px-0" : "px-3",
                 active
                   ? "bg-primary text-primary-foreground font-medium shadow-sm"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -53,32 +67,36 @@ export function NavRail({ email }) {
               <Icon
                 size={16}
                 strokeWidth={active ? 2.25 : 2}
-                className={cn(!active && "text-muted-foreground group-hover:text-foreground")}
+                className={cn("shrink-0", !active && "text-muted-foreground group-hover:text-foreground")}
               />
-              {label}
+              {!collapsed && label}
             </Link>
           );
         })}
       </nav>
 
       <div className="border-t border-border p-3">
-        <div className="flex items-center gap-2.5 rounded-lg px-2 py-1.5">
-          <Avatar className="h-8 w-8">
+        <div className={cn("flex items-center gap-2.5 rounded-lg py-1.5", collapsed ? "justify-center px-0" : "px-2")}>
+          <Avatar className="h-8 w-8 shrink-0">
             <AvatarFallback className="bg-secondary text-xs font-semibold text-primary">
               {email ? email[0].toUpperCase() : "…"}
             </AvatarFallback>
           </Avatar>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-xs font-medium text-foreground">{email || "Connecting…"}</p>
-            <p className="text-[11px] text-muted-foreground">Gmail connected</p>
-          </div>
-          <button
-            onClick={handleLogout}
-            title="Log out"
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-destructive"
-          >
-            <LogOut size={14} />
-          </button>
+          {!collapsed && (
+            <>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs font-medium text-foreground">{email || "Connecting…"}</p>
+                <p className="text-[11px] text-muted-foreground">Gmail connected</p>
+              </div>
+              <button
+                onClick={handleLogout}
+                title="Log out"
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-destructive"
+              >
+                <LogOut size={14} />
+              </button>
+            </>
+          )}
         </div>
       </div>
     </aside>

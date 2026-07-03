@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ImageOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 // Tags that could execute code, escape the sandboxed iframe, exfiltrate data,
 // or otherwise don't belong in a rendered email body. Inline `style` and even
@@ -61,8 +59,6 @@ function PlainTextBody({ text }) {
 
 function HtmlMessageBody({ html }) {
   const [sanitized, setSanitized] = useState(null);
-  const [blockedCount, setBlockedCount] = useState(0);
-  const [imagesAllowed, setImagesAllowed] = useState(false);
   const [iframeHeight, setIframeHeight] = useState(120);
   const iframeRef = useRef(null);
 
@@ -93,32 +89,14 @@ function HtmlMessageBody({ html }) {
     };
   }, [html]);
 
-  // Block remote images by default (tracking pixels, load-on-open receipts —
-  // the same reason Gmail shows an "Images are not displayed" bar) until the
-  // user opts in.
   const finalHtml = useMemo(() => {
     if (sanitized === null) return null;
-    const doc = new DOMParser().parseFromString(sanitized, "text/html");
-    let blocked = 0;
-    doc.querySelectorAll("img[src]").forEach((img) => {
-      const src = img.getAttribute("src") || "";
-      const isRemote = /^(https?:)?\/\//i.test(src);
-      if (isRemote && !imagesAllowed) {
-        img.setAttribute("data-blocked-src", src);
-        img.removeAttribute("src");
-        img.style.border = "1px dashed var(--border, #dde6f0)";
-        img.style.background = "#f3f7fb";
-        blocked += 1;
-      }
-    });
-    setBlockedCount(blocked);
-    const base = `<!doctype html><html><head><base target="_blank"><style>
+    return `<!doctype html><html><head><base target="_blank"><style>
       html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#0f1e30;word-wrap:break-word;}
       img{max-width:100%;}
       a{color:#1669c1;}
-    </style></head><body>${doc.body.innerHTML}</body></html>`;
-    return base;
-  }, [sanitized, imagesAllowed]);
+    </style></head><body>${sanitized}</body></html>`;
+  }, [sanitized]);
 
   const measure = () => {
     const doc = iframeRef.current?.contentDocument;
@@ -129,15 +107,6 @@ function HtmlMessageBody({ html }) {
 
   return (
     <div>
-      {blockedCount > 0 && !imagesAllowed && (
-        <div className="mb-2 flex items-center gap-2 rounded-lg border border-border bg-accent px-3 py-2 text-xs text-muted-foreground">
-          <ImageOff size={13} className="shrink-0" />
-          <span className="flex-1">Images are not displayed.</span>
-          <Button size="sm" variant="outline" className="h-6 text-[11px]" onClick={() => setImagesAllowed(true)}>
-            Display images below
-          </Button>
-        </div>
-      )}
       {finalHtml === null ? (
         <div className="h-16 animate-pulse rounded-lg bg-accent" />
       ) : (

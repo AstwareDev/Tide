@@ -9,7 +9,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AgentDecisionCard } from "@/components/inbox/agent-decision-card";
 import { MessageBody } from "@/components/inbox/message-body";
+import { SenderAvatar } from "@/components/inbox/sender-avatar";
 import { api } from "@/lib/api-client";
+import { getThread } from "@/lib/thread-cache";
+import { extractEmail } from "@/lib/gravatar";
 
 function formatDate(ms) {
   if (!ms) return "";
@@ -21,13 +24,17 @@ export function MessageDetail({ threadId }) {
   const [thread, setThread] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState(null);
 
   useEffect(() => {
     let active = true;
+    setThread(null);
+    setAvatarUrl(null);
     setLoading(true);
     setError(null);
-    api.gmail
-      .thread(threadId)
+    // Reads from the shared thread cache — if this thread was already
+    // prefetched on hover in the list, this resolves immediately.
+    getThread(threadId)
       .then((data) => active && setThread(data))
       .catch((err) => active && setError(err.message))
       .finally(() => active && setLoading(false));
@@ -35,6 +42,20 @@ export function MessageDetail({ threadId }) {
       active = false;
     };
   }, [threadId]);
+
+  useEffect(() => {
+    const lastMessage = thread?.messages?.[thread.messages.length - 1];
+    const email = extractEmail(lastMessage?.from);
+    if (!email) return;
+    let active = true;
+    api.gmail
+      .avatars([email])
+      .then((data) => active && setAvatarUrl(data.avatars?.[email] || null))
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [thread]);
 
   const act = async (action) => {
     const messageId = thread?.messages?.[thread.messages.length - 1]?.id;
@@ -71,10 +92,18 @@ export function MessageDetail({ threadId }) {
   return (
     <div key={threadId} className="flex-1 flex flex-col overflow-hidden h-full">
       <div className="p-6 border-b border-border flex items-start justify-between gap-4">
-        <div>
-          <h2 className="text-foreground font-semibold text-base mb-1">{thread?.subject}</h2>
-          <p className="text-muted-foreground text-sm">{lastMessage?.from}</p>
-          <p className="text-muted-foreground text-xs mt-1">{formatDate(lastMessage?.date)}</p>
+        <div className="flex items-start gap-3 min-w-0">
+          <SenderAvatar
+            avatarUrl={avatarUrl}
+            from={lastMessage?.from}
+            senderName={lastMessage?.from}
+            className="mt-0.5 h-10 w-10 shrink-0"
+          />
+          <div className="min-w-0">
+            <h2 className="text-foreground font-semibold text-base mb-1">{thread?.subject}</h2>
+            <p className="text-muted-foreground text-sm truncate">{lastMessage?.from}</p>
+            <p className="text-muted-foreground text-xs mt-1">{formatDate(lastMessage?.date)}</p>
+          </div>
         </div>
         <div className="flex items-center gap-1 shrink-0">
           <Button variant="ghost" size="icon" onClick={() => act("archive")} title="Archive (e)">

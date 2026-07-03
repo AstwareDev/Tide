@@ -1,12 +1,12 @@
 "use client";
 
-import { forwardRef, useEffect, useState } from "react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { forwardRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { gravatarUrl, avatarColor } from "@/lib/gravatar";
+import { SenderAvatar } from "@/components/inbox/sender-avatar";
 import { getLabelColor } from "@/lib/label-colors";
 import { cn } from "@/lib/utils";
+import { prefetchThread } from "@/lib/thread-cache";
 
 const ACTION_BADGE_VARIANT = {
   label: "default",
@@ -23,49 +23,6 @@ function formatDate(ms) {
   return `${Math.floor(diff / 86400000)}d ago`;
 }
 
-function initials(from) {
-  const name = (from || "").split("<")[0].trim();
-  const parts = name.split(" ").filter(Boolean);
-  if (!parts.length) return "?";
-  return (parts[0][0] + (parts[1]?.[0] || "")).toUpperCase();
-}
-
-// Cascades through candidate image sources, advancing whenever one fails to
-// load, and falling back to initials once all are exhausted. `avatarUrl`
-// (resolved server-side) is the People API contact photo or, failing that, the
-// sender's HTTP-verified domain favicon; Gravatar is the final image attempt.
-// The domain favicon is deliberately NOT included here — Google serves a
-// generic globe with a 404 status that browsers render anyway, so it can only
-// be trusted after the server checks its status (see lib/google/people.js).
-function SenderAvatar({ avatarUrl, from, pending, senderName }) {
-  const candidates = pending ? [] : [avatarUrl, gravatarUrl(from)].filter(Boolean);
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    setIndex(0);
-  }, [avatarUrl, from, pending]);
-
-  const src = candidates[index];
-
-  return (
-    <Avatar className="mt-0.5 h-9 w-9 ring-1 ring-border">
-      {src && (
-        <AvatarImage
-          key={src}
-          src={src}
-          alt=""
-          onLoadingStatusChange={(status) => {
-            if (status === "error") setIndex((i) => i + 1);
-          }}
-        />
-      )}
-      <AvatarFallback style={{ backgroundColor: avatarColor(senderName), color: "#fff" }}>
-        {initials(from)}
-      </AvatarFallback>
-    </Avatar>
-  );
-}
-
 export const MessageRow = forwardRef(function MessageRow(
   { thread, avatarUrl, avatarPending, active, checked, onSelect, onToggleCheck },
   ref
@@ -76,6 +33,7 @@ export const MessageRow = forwardRef(function MessageRow(
     <button
       ref={ref}
       onClick={onSelect}
+      onMouseEnter={() => prefetchThread(thread.id)}
       data-active={active || undefined}
       className={cn(
         "w-full text-left px-3.5 py-3 rounded-xl border border-transparent bg-card transition-all duration-150 group relative",
@@ -94,7 +52,13 @@ export const MessageRow = forwardRef(function MessageRow(
           onClick={(e) => e.stopPropagation()}
           className="mt-2 shrink-0 accent-primary"
         />
-        <SenderAvatar avatarUrl={avatarUrl} from={thread.from} pending={avatarPending} senderName={senderName} />
+        <SenderAvatar
+          avatarUrl={avatarUrl}
+          from={thread.from}
+          pending={avatarPending}
+          senderName={senderName}
+          className="mt-0.5 h-9 w-9"
+        />
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2 mb-0.5">

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { Inbox, Bot, Activity, Settings, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { SenderAvatar } from "@/components/inbox/sender-avatar";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api-client";
 
@@ -19,9 +19,25 @@ export function NavRail({ email }) {
   const pathname = usePathname();
   const router = useRouter();
   const [hovered, setHovered] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [avatarPending, setAvatarPending] = useState(true);
 
   const isInbox = pathname?.startsWith("/inbox");
   const collapsed = isInbox && !hovered;
+
+  useEffect(() => {
+    if (!email) return;
+    let active = true;
+    setAvatarPending(true);
+    api.gmail
+      .avatars([email])
+      .then((data) => active && setAvatarUrl(data.avatars?.[email] || null))
+      .catch(() => {})
+      .finally(() => active && setAvatarPending(false));
+    return () => {
+      active = false;
+    };
+  }, [email]);
 
   const handleLogout = async () => {
     try {
@@ -77,11 +93,13 @@ export function NavRail({ email }) {
 
       <div className="border-t border-border p-3">
         <div className={cn("flex items-center gap-2.5 rounded-lg py-1.5", collapsed ? "justify-center px-0" : "px-2")}>
-          <Avatar className="h-8 w-8 shrink-0">
-            <AvatarFallback className="bg-secondary text-xs font-semibold text-primary">
-              {email ? email[0].toUpperCase() : "…"}
-            </AvatarFallback>
-          </Avatar>
+          <SenderAvatar
+            avatarUrl={avatarUrl}
+            from={email}
+            senderName={email}
+            pending={avatarPending}
+            className="h-8 w-8 shrink-0"
+          />
           {!collapsed && (
             <>
               <div className="min-w-0 flex-1">

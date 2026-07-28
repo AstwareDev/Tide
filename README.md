@@ -16,6 +16,10 @@
   </a>
 </p>
 
+<p align="center">
+  <img src=".github/preview.png" alt="Tide inbox preview" width="720" />
+</p>
+
 > A Gmail inbox that's more comfortable and addictive than Gmail itself — with passive AI agents that quietly label, archive, and delete the noise.
 
 ## What is Tide?
@@ -29,6 +33,8 @@ You define the rules. The agents do the work. The inbox itself is designed to be
 - **Education Labeler** — labels emails from courses, universities, or learning platforms as `Education`
 - **Ads Deleter** — trashes promotional and marketing emails
 - **Stale Security Notification Deleter** — removes one-time alerts like "new sign-in detected" or "password changed successfully"
+
+> **Demo status:** the hosted instance at [tidemail.vercel.app](https://tidemail.vercel.app/) was a single-user OAuth test deployment on Vercel's free KV tier, so it's not maintained as a live public demo — sign-in is restricted to the developer's own Gmail (this is by design, see [Google Cloud Setup](#google-cloud-setup)) and the free-tier data store may be stale or inconsistent. To actually try Tide, clone the repo and run it locally against your own Gmail account and Vercel KV store — see [Development](#development) below.
 
 ### Contents
 
@@ -183,7 +189,8 @@ Agents default to no-match ("skip") when uncertain — a conservative prompt is 
 - **"Delete" means Trash**, not permanent deletion. Gmail empties Trash after 30 days.
 - The agent cycle processes up to **100 unlabeled threads per run**. Large backlogs may take several cycles.
 - Vercel Cron frequency is plan-tier dependent — confirm 5-minute cron is available on your plan.
-- This is designed for **one user only** — there is no multi-tenant account system.
+- This is designed for **one user only** — there is no multi-tenant account system, and the hosted instance's Google OAuth consent screen only allows the developer's own test-user Gmail to sign in.
+- The hosted demo runs on Vercel's free-tier KV store, so data may be reset or inconsistent over time — treat the live link as a screenshot-in-motion rather than a persistent product.
 
 ---
 
